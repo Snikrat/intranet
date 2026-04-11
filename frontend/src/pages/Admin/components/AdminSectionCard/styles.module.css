@@ -1,0 +1,44 @@
+.sectionCard {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #d9dee7;
+  border-radius: 24px;
+  padding: 26px 26px 20px;
+  box-sizing: border-box;
+}
+
+.title {
+  margin: 0 0 22px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #041b4d;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .sectionCard {
+    border-radius: 18px;
+    padding: 20px 16px 16px;
+  }
+
+  .title {
+    margin-bottom: 18px;
+    font-size: 1.05rem;
+  }
+
+  .footer {
+    margin-top: 16px;
+  }
+}

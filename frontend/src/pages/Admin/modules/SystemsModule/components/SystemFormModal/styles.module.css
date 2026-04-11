@@ -1,0 +1,135 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.fieldError {
+  font-size: 0.9rem;
+  color: #c81e1e;
+  font-weight: 600;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 1rem;
+  font-family: inherit;
+  padding: 14px 16px;
+  outline: none;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #94a3b8;
+}
+
+.textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.inputError {
+  border-color: #c81e1e !important;
+}
+
+.iconPicker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.iconOption {
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #334155;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.98rem;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.iconOption:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.iconOptionActive {
+  border-color: #ef4444;
+  color: #c81e1e;
+  background: #fff7f7;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkboxLabel {
+  font-size: 1rem;
+  color: #111827;
+}
+
+.footerBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footerLeft,
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .footerBar {
+    justify-content: flex-end;
+  }
+
+  .footerLeft,
+  .footerRight {
+    width: 100%;
+  }
+
+  .footerRight {
+    justify-content: flex-end;
+  }
+}

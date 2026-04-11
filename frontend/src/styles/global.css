@@ -1,0 +1,44 @@
+/* RESET BÁSICO */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* MELHORA RENDERIZAÇÃO */
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: sans-serif;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* REMOVE ESTILO PADRÃO DE LISTAS */
+ul,
+ol {
+  list-style: none;
+}
+
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* BOTÕES */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* IMAGENS */
+img {
+  max-width: 100%;
+  display: block;
+}

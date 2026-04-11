@@ -1,0 +1,18 @@
+.loadingText {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.98rem;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr 520px;
+  gap: 24px;
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+}
