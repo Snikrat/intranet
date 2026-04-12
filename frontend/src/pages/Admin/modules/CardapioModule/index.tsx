@@ -42,8 +42,6 @@ type ConfirmModalState = {
   message: string;
 };
 
-fetch(`${API_URL}/menu/current`);
-
 const emptyMenu: WeeklyMenu = {
   active: true,
   days: {
@@ -72,7 +70,7 @@ function getDayPreviewText(day: DayMenu) {
 }
 
 async function getCurrentMenu(): Promise<WeeklyMenu> {
-  const response = await fetch(API_URL);
+  const response = await fetch(`${API_URL}/menu/current`);
 
   if (!response.ok) {
     throw new Error("Erro ao buscar cardápio");
@@ -82,7 +80,7 @@ async function getCurrentMenu(): Promise<WeeklyMenu> {
 }
 
 async function saveCurrentMenu(menu: WeeklyMenu): Promise<WeeklyMenu> {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/menu/current`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -98,7 +96,7 @@ async function saveCurrentMenu(menu: WeeklyMenu): Promise<WeeklyMenu> {
 }
 
 async function deleteCurrentMenu(): Promise<void> {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/menu/current`, {
     method: "DELETE",
   });
 
