@@ -18,7 +18,6 @@ type WeeklyMenu = {
   days: Record<DayKey, DayMenu>;
 };
 
-// 🔥 agora usa a API global
 const MENU_ENDPOINT = `${API_URL}/menu/current`;
 
 const weekDays = [
@@ -124,6 +123,7 @@ export function CardapioPage() {
           <span className={styles.heroBadge}>utilidades</span>
           <h1 className={styles.heroTitle}>Cardápio</h1>
           <p className={styles.heroDate}>{getWeekRange()}</p>
+          <p className={styles.heroInfo}>Atendimento da cozinha: 12h às 14h.</p>
         </div>
       </section>
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import {
   CalendarDays,
@@ -10,6 +10,7 @@ import {
   Boxes,
 } from "lucide-react";
 import { API_URL } from "../../../../config/env";
+import { Pagination } from "../../../../components/Pagination";
 
 type SystemItem = {
   id: number;
@@ -31,8 +32,23 @@ const iconMap = {
   boxes: Boxes,
 };
 
+const MOBILE_ITEMS_PER_PAGE = 5;
+
 export function SystemsSection() {
   const [systems, setSystems] = useState<SystemItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 640);
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     async function loadSystems() {
@@ -74,6 +90,30 @@ export function SystemsSection() {
     }
   }
 
+  const totalPages = Math.ceil(systems.length / MOBILE_ITEMS_PER_PAGE);
+
+  const visibleSystems = useMemo(() => {
+    if (!isMobile) {
+      return systems;
+    }
+
+    const startIndex = (currentPage - 1) * MOBILE_ITEMS_PER_PAGE;
+    const endIndex = startIndex + MOBILE_ITEMS_PER_PAGE;
+
+    return systems.slice(startIndex, endIndex);
+  }, [systems, currentPage, isMobile]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setCurrentPage(1);
+      return;
+    }
+
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [isMobile, currentPage, totalPages]);
+
   if (systems.length === 0) {
     return (
       <section className={styles.section}>
@@ -107,7 +147,7 @@ export function SystemsSection() {
       </div>
 
       <div className={styles.grid}>
-        {systems.map((system) => {
+        {visibleSystems.map((system) => {
           const Icon =
             iconMap[system.icon as keyof typeof iconMap] || CalendarDays;
 
@@ -130,6 +170,16 @@ export function SystemsSection() {
           );
         })}
       </div>
+
+      {isMobile && totalPages > 1 && (
+        <div className={styles.paginationWrapper}>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </section>
   );
 }

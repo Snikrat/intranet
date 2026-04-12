@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Logo } from "../../components/Logo";
 import { api } from "../../services/api";
+import { AUTH_MESSAGE_KEY, TOKEN_KEY } from "../../services/auth";
+import { toast } from "react-toastify";
+import { ArrowLeft } from "lucide-react";
 
 export function Login() {
   const navigate = useNavigate();
@@ -12,6 +15,15 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const message = localStorage.getItem(AUTH_MESSAGE_KEY);
+
+    if (message) {
+      toast.error(message);
+      localStorage.removeItem(AUTH_MESSAGE_KEY);
+    }
+  }, []);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,7 +39,7 @@ export function Login() {
 
       const { token } = response.data;
 
-      localStorage.setItem("@intranet:token", token);
+      localStorage.setItem(TOKEN_KEY, token);
       navigate("/admin");
     } catch {
       setError("usuário ou senha inválidos");
@@ -39,6 +51,11 @@ export function Login() {
   return (
     <main className={styles.page}>
       <section className={styles.card}>
+        <Link to="/" className={styles.backButton}>
+          <ArrowLeft size={16} />
+          <span>Voltar para a home</span>
+        </Link>
+
         <div className={styles.header}>
           <div className={styles.logo}>
             <Logo />

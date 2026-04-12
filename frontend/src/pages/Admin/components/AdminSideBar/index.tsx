@@ -7,9 +7,13 @@ import {
   PanelsTopLeft,
   Menu,
   X,
+  LogOut,
+  House,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 import type { AdminTab } from "../..";
+import { logout } from "../../../../services/auth";
 
 type AdminSidebarProps = {
   activeTab: AdminTab;
@@ -61,6 +65,15 @@ export function AdminSidebar({ activeTab, onChangeTab }: AdminSidebarProps) {
 
   function handleChangeTab(tab: AdminTab) {
     onChangeTab(tab);
+    setIsMobileOpen(false);
+  }
+
+  function handleLogout() {
+    setIsMobileOpen(false);
+    logout();
+  }
+
+  function handleGoHome() {
     setIsMobileOpen(false);
   }
 
@@ -140,6 +153,26 @@ export function AdminSidebar({ activeTab, onChangeTab }: AdminSidebarProps) {
             );
           })}
         </nav>
+
+        <div className={styles.sidebarFooter}>
+          <Link to="/" className={styles.homeButton} onClick={handleGoHome}>
+            <span className={styles.navIcon}>
+              <House size={18} />
+            </span>
+            <span className={styles.navLabel}>Ir para Home</span>
+          </Link>
+
+          <button
+            type="button"
+            className={styles.logoutButton}
+            onClick={handleLogout}
+          >
+            <span className={styles.navIcon}>
+              <LogOut size={18} />
+            </span>
+            <span className={styles.navLabel}>Logout</span>
+          </button>
+        </div>
       </aside>
     </>
   );

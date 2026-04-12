@@ -6,14 +6,14 @@
 
 .hero {
   position: relative;
-  min-height: 420px;
+  min-height: 500px;
   background-image: url("https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1600&q=80");
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 24px 80px;
+  padding: 140px 24px 100px;
 }
 
 .overlay {
@@ -28,6 +28,7 @@
   text-align: center;
   color: #ffffff;
   max-width: 900px;
+  width: 100%;
 }
 
 .heroBadge {
@@ -53,6 +54,20 @@
   margin-top: 14px;
   font-size: 1.2rem;
   font-weight: 500;
+}
+
+.heroInfo {
+  margin: 16px auto 0;
+  width: fit-content;
+  max-width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #f8fafc;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
 }
 
 .content {
@@ -84,6 +99,11 @@
     box-shadow 0.2s ease;
 }
 
+.menuCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.12);
+}
+
 .menuCardActive {
   border: none;
   box-shadow:
@@ -112,6 +132,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   box-shadow: 0 8px 20px rgba(208, 22, 22, 0.3);
+  white-space: nowrap;
 }
 
 .iconWrapper {
@@ -124,6 +145,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 22px;
+  flex-shrink: 0;
 }
 
 .dayTitle {
@@ -131,6 +153,8 @@
   font-size: 1.9rem;
   font-weight: 800;
   color: #081633;
+  line-height: 1.15;
+  word-break: break-word;
 }
 
 .menuList {
@@ -147,6 +171,24 @@
   font-size: 1.05rem;
   color: #6b7280;
   line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.menuItemHoliday {
+  background: rgba(255, 80, 80, 0.1);
+  color: #ff4d4d;
+  border-left: 3px solid #ff4d4d;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.menuItemToDefine {
+  background: rgba(255, 200, 0, 0.1);
+  color: #e6a700;
+  border-left: 3px solid #e6a700;
+  padding: 10px 12px;
+  border-radius: 10px;
 }
 
 @media (max-width: 1400px) {
@@ -155,47 +197,175 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .hero {
-    min-height: 340px;
-    padding-top: 100px;
+    min-height: 430px;
+    padding: 120px 20px 84px;
+  }
+
+  .content {
+    padding: 48px 20px 72px;
   }
 
   .menuGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .menuCard {
+    min-height: 320px;
+    padding: 24px 20px;
+  }
+
+  .iconWrapper {
+    width: 82px;
+    height: 82px;
+    margin-bottom: 18px;
+  }
+
+  .dayTitle {
+    font-size: 1.7rem;
+    margin-bottom: 18px;
+  }
+
+  .menuItem {
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .hero {
+    min-height: 360px;
+    padding: 110px 18px 70px;
+  }
+
+  .heroBadge {
+    font-size: 0.82rem;
+    padding: 7px 12px;
+    margin-bottom: 12px;
+  }
+
+  .heroTitle {
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.05;
+  }
+
+  .heroDate {
+    margin-top: 12px;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .heroInfo {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+
   .content {
-    padding: 40px 16px 60px;
+    padding: 36px 18px 56px;
   }
 
   .menuGrid {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
 
   .menuCard {
     min-height: auto;
+    padding: 22px 18px;
+    border-radius: 20px;
+  }
+
+  .todayBadgeTop {
+    top: -10px;
+    font-size: 0.7rem;
+    padding: 5px 12px;
+  }
+
+  .iconWrapper {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 16px;
   }
 
   .dayTitle {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .menuList {
+    gap: 12px;
+  }
+
+  .menuItem {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .menuItemHoliday,
+  .menuItemToDefine {
+    padding: 9px 11px;
+    border-radius: 8px;
   }
 }
 
-.menuItemHoliday {
-  background: rgba(255, 80, 80, 0.1);
-  color: #ff4d4d;
-  border-left: 3px solid #ff4d4d;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
+@media (max-width: 480px) {
+  .hero {
+    min-height: 320px;
+    padding: 96px 16px 56px;
+  }
 
-.menuItemToDefine {
-  background: rgba(255, 200, 0, 0.1);
-  color: #e6a700;
-  border-left: 3px solid #e6a700;
-  padding: 6px 10px;
-  border-radius: 6px;
+  .heroContent {
+    max-width: 100%;
+  }
+
+  .heroBadge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroDate {
+    font-size: 0.95rem;
+  }
+
+  .heroInfo {
+    font-size: 0.84rem;
+    padding: 8px 12px;
+  }
+
+  .content {
+    padding: 30px 16px 48px;
+  }
+
+  .menuCard {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .iconWrapper {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 14px;
+  }
+
+  .dayTitle {
+    font-size: 1.35rem;
+    margin-bottom: 14px;
+  }
+
+  .menuItem {
+    font-size: 0.92rem;
+  }
+
+  .todayBadgeTop {
+    font-size: 0.66rem;
+    padding: 5px 10px;
+  }
 }

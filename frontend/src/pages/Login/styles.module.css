@@ -22,19 +22,36 @@
   margin-bottom: 28px;
 }
 
+/* 🔥 LOGO CORRIGIDA */
 .logo {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 16px;
-  border-radius: 16px;
-  background: #111827;
-  color: #ffffff;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 18px;
+
+  background: linear-gradient(135deg, #111827, #1f2937);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+
+  padding: 10px;
+  overflow: hidden;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔥 GARANTE CENTRALIZAÇÃO REAL */
+.logo img,
+.logo svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* opcional: micro ajuste visual (caso a seta puxe pro lado) */
+.logo svg {
+  transform: translateX(1px);
 }
 
 .title {
@@ -42,6 +59,7 @@
   font-weight: 800;
   color: #111827;
   margin-bottom: 8px;
+  line-height: 1.2;
 }
 
 .subtitle {
@@ -116,9 +134,96 @@
   transform: scale(0.99);
 }
 
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .errorMessage {
   font-size: 0.9rem;
   color: #b91c1c;
   font-weight: 600;
   text-align: center;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.backButton:hover {
+  color: #111827;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 20px;
+  }
+
+  .card {
+    padding: 28px 24px;
+    border-radius: 18px;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .card {
+    margin-top: 24px;
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+
+  .header {
+    margin-bottom: 24px;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+    padding: 8px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .input,
+  .button {
+    height: 46px;
+    font-size: 0.94rem;
+  }
+
+  .backButton {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
 }

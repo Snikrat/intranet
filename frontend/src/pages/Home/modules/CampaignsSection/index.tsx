@@ -14,6 +14,7 @@ type CampaignItem = {
 export function CardsSaude() {
   const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     async function loadCampaigns() {
@@ -73,6 +74,20 @@ export function CardsSaude() {
     }
   }, [normalizedCampaigns, currentIndex]);
 
+  useEffect(() => {
+    if (normalizedCampaigns.length <= 1 || isPaused) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setCurrentIndex((prev) =>
+        prev === normalizedCampaigns.length - 1 ? 0 : prev + 1,
+      );
+    }, 10000);
+
+    return () => window.clearInterval(interval);
+  }, [normalizedCampaigns.length, isPaused]);
+
   if (normalizedCampaigns.length === 0) {
     return (
       <section className={styles.section}>
@@ -90,24 +105,22 @@ export function CardsSaude() {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <div className={styles.carousel}>
-          <button
-            type="button"
-            className={styles.arrowButton}
-            onClick={prevSlide}
-          >
-            ←
-          </button>
-
+        <div
+          className={styles.carousel}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           <article className={styles.card}>
             <div className={styles.textContent}>
               <h2 className={styles.title}>{currentCard.title}</h2>
 
-              {currentCard.paragraphs.map((paragraph, index) => (
-                <p key={index} className={styles.text}>
-                  {paragraph}
-                </p>
-              ))}
+              <div className={styles.textBlock}>
+                {currentCard.paragraphs.map((paragraph, index) => (
+                  <p key={index} className={styles.text}>
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </div>
 
             <div className={styles.imageWrapper}>
@@ -119,26 +132,39 @@ export function CardsSaude() {
             </div>
           </article>
 
-          <button
-            type="button"
-            className={styles.arrowButton}
-            onClick={nextSlide}
-          >
-            →
-          </button>
-        </div>
-
-        <div className={styles.dots}>
-          {normalizedCampaigns.map((_, index) => (
+          <div className={styles.controls}>
             <button
-              key={index}
               type="button"
-              className={`${styles.dot} ${
-                index === currentIndex ? styles.activeDot : ""
-              }`}
-              onClick={() => setCurrentIndex(index)}
-            />
-          ))}
+              className={styles.arrowButton}
+              onClick={prevSlide}
+              aria-label="Campanha anterior"
+            >
+              ←
+            </button>
+
+            <div className={styles.dots}>
+              {normalizedCampaigns.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`${styles.dot} ${
+                    index === currentIndex ? styles.activeDot : ""
+                  }`}
+                  onClick={() => setCurrentIndex(index)}
+                  aria-label={`Ir para campanha ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className={styles.arrowButton}
+              onClick={nextSlide}
+              aria-label="Próxima campanha"
+            >
+              →
+            </button>
+          </div>
         </div>
 
         <p className={styles.footerText}>

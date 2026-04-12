@@ -36,7 +36,7 @@ authRoutes.post("/login", (req: Request, res: Response) => {
     },
     jwtSecret,
     {
-      expiresIn: "8h",
+      expiresIn: "1d",
     },
   );
 

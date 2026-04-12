@@ -4,15 +4,13 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        {/* BLOCO 1 */}
         <div className={styles.column}>
-          <h3 className={styles.logo}>PGP Intranet</h3>
+          <h3 className={styles.logo}>Intranet</h3>
           <p className={styles.text}>
             Central de acesso aos sistemas e ferramentas internas da empresa.
           </p>
         </div>
 
-        {/* BLOCO 2 */}
         <div className={styles.column}>
           <h4 className={styles.title}>Links úteis</h4>
           <ul className={styles.list}>
@@ -31,7 +29,6 @@ export function Footer() {
           </ul>
         </div>
 
-        {/* BLOCO 3 */}
         <div className={styles.column}>
           <h4 className={styles.title}>Contato</h4>
           <p className={styles.text}>📞 (21) 2628-7972</p>
@@ -41,7 +38,7 @@ export function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        © {new Date().getFullYear()} PGP - Todos os direitos reservados
+        © {new Date().getFullYear()} TIC - Todos os direitos reservados
       </div>
     </footer>
   );
