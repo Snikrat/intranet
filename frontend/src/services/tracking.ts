@@ -1,6 +1,8 @@
+import { API_URL } from "./api";
+
 export async function trackPageView(page: string) {
   try {
-    await fetch("http://localhost:3000/track/page-view", {
+    await fetch(`${API_URL}/track/page-view`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -14,7 +16,7 @@ export async function trackPageView(page: string) {
 
 export async function trackSystemClick(systemName: string) {
   try {
-    await fetch("http://localhost:3000/track/system-click", {
+    await fetch(`${API_URL}/track/system-click`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

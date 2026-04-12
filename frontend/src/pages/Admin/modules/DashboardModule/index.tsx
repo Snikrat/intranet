@@ -5,6 +5,7 @@ import { RecentActivity } from "./components/RecentActivity";
 import { trackPageView } from "../../../../services/tracking";
 import styles from "./styles.module.css";
 import { AdminLayout } from "../../components/AdminLayout";
+import { API_URL } from "../../../../services/api";
 
 type DashboardSummary = {
   activeSystems: number;
@@ -52,7 +53,7 @@ export function DashboardModule() {
   useEffect(() => {
     async function loadSummary() {
       try {
-        const response = await fetch("http://localhost:3000/dashboard/summary");
+        const response = await fetch(`${API_URL}/dashboard/summary`);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar resumo do dashboard");
@@ -72,7 +73,7 @@ export function DashboardModule() {
     async function loadActivities() {
       try {
         const response = await fetch(
-          `http://localhost:3000/activities?page=${activitiesPage}&limit=5`,
+          `${API_URL}/activities?page=${activitiesPage}&limit=5`,
         );
 
         if (!response.ok) {

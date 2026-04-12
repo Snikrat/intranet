@@ -117,10 +117,10 @@ export function CampaignsModule() {
     }
 
     if (image.startsWith("/uploads/")) {
-      return `http://localhost:3000${image}`;
+      return `${API_URL}${image}`;
     }
 
-    return `http://localhost:3000/uploads/${image}`;
+    return `${API_URL}/uploads/${image}`;
   }
 
   function validateForm() {
@@ -289,7 +289,7 @@ export function CampaignsModule() {
   async function handleSaveConfirmed() {
     try {
       if (isCreatingCampaign || selectedCampaignId === null) {
-        const response = await fetch("http://localhost:3000/campaigns", {
+        const response = await fetch(`${API_URL}/campaigns`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -332,7 +332,7 @@ export function CampaignsModule() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/campaigns/${selectedCampaignId}`,
+        `${API_URL}/campaigns/${selectedCampaignId}`,
         {
           method: "PUT",
           headers: {
@@ -394,7 +394,7 @@ export function CampaignsModule() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/campaigns/${selectedCampaignId}`,
+        `${API_URL}/campaigns/${selectedCampaignId}`,
         {
           method: "DELETE",
         },

@@ -9,6 +9,7 @@ import {
   BarChart3,
   Boxes,
 } from "lucide-react";
+import { API_URL } from "../../../../services/api";
 
 type SystemItem = {
   id: number;
@@ -36,7 +37,7 @@ export function SystemsSection() {
   useEffect(() => {
     async function loadSystems() {
       try {
-        const response = await fetch("http://localhost:3000/systems");
+        const response = await fetch(`${API_URL}/systems`);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar sistemas");
@@ -54,12 +55,12 @@ export function SystemsSection() {
       }
     }
 
-    loadSystems();
+    void loadSystems();
   }, []);
 
   async function handleTrackClick(systemTitle: string) {
     try {
-      await fetch("http://localhost:3000/track/system-click", {
+      await fetch(`${API_URL}/track/system-click`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

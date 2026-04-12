@@ -240,7 +240,7 @@ export function SystemsModule() {
   async function handleSaveConfirmed() {
     try {
       if (isCreating || selectedId === null) {
-        const response = await fetch("http://localhost:3000/systems", {
+        const response = await fetch(`${API_URL}/systems`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -273,16 +273,13 @@ export function SystemsModule() {
         return;
       }
 
-      const response = await fetch(
-        `http://localhost:3000/systems/${selectedId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch(`${API_URL}/systems/${selectedId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao atualizar sistema");
@@ -325,12 +322,9 @@ export function SystemsModule() {
     if (selectedId === null || isCreating) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/systems/${selectedId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`${API_URL}/systems/${selectedId}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao excluir sistema");

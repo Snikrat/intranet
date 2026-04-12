@@ -3,6 +3,7 @@ import styles from "./styles.module.css";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import { Utensils } from "lucide-react";
+import { API_URL } from "../../services/api";
 
 type DayKey = "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
 
@@ -17,7 +18,8 @@ type WeeklyMenu = {
   days: Record<DayKey, DayMenu>;
 };
 
-const API_URL = "http://localhost:3000/menu/current";
+// 🔥 agora usa a API global
+const MENU_ENDPOINT = `${API_URL}/menu/current`;
 
 const weekDays = [
   "Domingo",
@@ -85,7 +87,7 @@ export function CardapioPage() {
         setIsLoading(true);
         setHasError(false);
 
-        const response = await fetch(API_URL);
+        const response = await fetch(MENU_ENDPOINT);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar cardápio");
@@ -101,7 +103,7 @@ export function CardapioPage() {
       }
     }
 
-    loadMenu();
+    void loadMenu();
   }, []);
 
   const menuData = [

@@ -12,6 +12,7 @@ import { IconActionButton } from "../../components/IconActionButton";
 import { Pagination } from "../../../../components/Pagination";
 import styles from "./styles.module.css";
 import type { CustomSelectOption } from "../../../../components/CustomSelect";
+import { API_URL } from "../../../../services/api";
 
 type PopupDisplayType = "modal" | "floating";
 
@@ -107,7 +108,7 @@ export function PopupModule() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:3000/popups");
+      const response = await fetch(`${API_URL}/popups`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -258,9 +259,7 @@ export function PopupModule() {
       const isEditing = editingId !== null;
 
       const response = await fetch(
-        isEditing
-          ? `http://localhost:3000/popups/${editingId}`
-          : "http://localhost:3000/popups",
+        isEditing ? `${API_URL}/popups/${editingId}` : `${API_URL}/popups`,
         {
           method: isEditing ? "PUT" : "POST",
           headers: {
@@ -316,12 +315,9 @@ export function PopupModule() {
     if (editingId === null) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/popups/${editingId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`${API_URL}/popups/${editingId}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
         let message = "Erro ao excluir popup";

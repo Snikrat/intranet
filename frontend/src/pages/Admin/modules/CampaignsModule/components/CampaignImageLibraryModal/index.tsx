@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../../../components/Button";
 import { Modal } from "../../../../components/Modal";
+
 import styles from "./styles.module.css";
+import { API_URL } from "../../../../../../services/api";
 
 export type CampaignLibraryImage = {
   id: number;
@@ -36,7 +38,7 @@ export function CampaignImageLibraryModal({
       try {
         setIsLoading(true);
 
-        const response = await fetch("http://localhost:3000/media/images");
+        const response = await fetch(`${API_URL}/media/images`);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar imagens");
@@ -52,7 +54,7 @@ export function CampaignImageLibraryModal({
       }
     }
 
-    loadImages();
+    void loadImages();
   }, [open]);
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -65,7 +67,7 @@ export function CampaignImageLibraryModal({
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await fetch("http://localhost:3000/media/images", {
+      const response = await fetch(`${API_URL}/media/images`, {
         method: "POST",
         body: formData,
       });
@@ -96,7 +98,7 @@ export function CampaignImageLibraryModal({
       setIsDeleting(true);
 
       const response = await fetch(
-        `http://localhost:3000/media/images/${imageToDelete.id}`,
+        `${API_URL}/media/images/${imageToDelete.id}`,
         {
           method: "DELETE",
         },

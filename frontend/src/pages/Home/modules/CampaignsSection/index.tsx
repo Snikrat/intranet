@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
+import { API_URL } from "../../../../services/api";
 
 type CampaignItem = {
   id: number;
@@ -17,7 +18,7 @@ export function CardsSaude() {
   useEffect(() => {
     async function loadCampaigns() {
       try {
-        const response = await fetch("http://localhost:3000/campaigns");
+        const response = await fetch(`${API_URL}/campaigns`);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar campanhas");
@@ -35,7 +36,7 @@ export function CardsSaude() {
       }
     }
 
-    loadCampaigns();
+    void loadCampaigns();
   }, []);
 
   const normalizedCampaigns = useMemo(() => {

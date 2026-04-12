@@ -7,6 +7,7 @@ import { Hero } from "./modules/Hero";
 import { PopupModal } from "../../components/PopupModal";
 import { SystemsSection } from "./modules/SystemSection";
 import { trackPageView } from "../../services/tracking";
+import { API_URL } from "../../services/api";
 
 type PopupDisplayType = "modal" | "floating";
 
@@ -92,7 +93,7 @@ function App() {
 
     async function loadPopup() {
       try {
-        const response = await fetch("http://localhost:3000/popup/active");
+        const response = await fetch(`${API_URL}/popup/active`);
         const data = await response.json();
 
         if (!response.ok || !data) {
@@ -130,7 +131,7 @@ function App() {
       }
     }
 
-    loadPopup();
+    void loadPopup();
 
     return () => {
       if (popupTimeoutRef.current) {
