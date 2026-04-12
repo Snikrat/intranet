@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
-import { API_URL } from "../../../../services/api";
+import { API_URL } from "../../../../config/env";
 
 type CampaignItem = {
   id: number;

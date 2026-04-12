@@ -12,7 +12,8 @@ import type { SystemCard } from "./types";
 import { emptySystemForm } from "./mock";
 import { AdminLayout } from "../../components/AdminLayout";
 import { SystemFormModal } from "./components/SystemFormModal";
-import { API_URL } from "../../../../services/api";
+import { API_URL } from "../../../../config/env";
+import { api } from "../../../../services/api";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -240,19 +241,8 @@ export function SystemsModule() {
   async function handleSaveConfirmed() {
     try {
       if (isCreating || selectedId === null) {
-        const response = await fetch(`${API_URL}/systems`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (!response.ok) {
-          throw new Error("Erro ao criar sistema");
-        }
-
-        const newSystem: SystemCard = await response.json();
+        const response = await api.post<SystemCard>("/systems", formData);
+        const newSystem = response.data;
 
         setSystems((prev) => {
           const updated = [...prev, newSystem];
@@ -273,19 +263,12 @@ export function SystemsModule() {
         return;
       }
 
-      const response = await fetch(`${API_URL}/systems/${selectedId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await api.put<SystemCard>(
+        `/systems/${selectedId}`,
+        formData,
+      );
 
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar sistema");
-      }
-
-      const updatedSystem: SystemCard = await response.json();
+      const updatedSystem = response.data;
 
       setSystems((prev) =>
         prev.map((system) =>
@@ -322,13 +305,7 @@ export function SystemsModule() {
     if (selectedId === null || isCreating) return;
 
     try {
-      const response = await fetch(`${API_URL}/systems/${selectedId}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Erro ao excluir sistema");
-      }
+      await api.delete(`/systems/${selectedId}`);
 
       const updatedSystems = systems.filter(
         (system) => system.id !== selectedId,

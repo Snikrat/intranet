@@ -3,9 +3,9 @@ import { SummaryCards } from "./components/SummaryCards";
 import { DashboardInsights } from "./components/DashboardInsights";
 import { RecentActivity } from "./components/RecentActivity";
 import { trackPageView } from "../../../../services/tracking";
+import { api } from "../../../../services/api";
 import styles from "./styles.module.css";
 import { AdminLayout } from "../../components/AdminLayout";
-import { API_URL } from "../../../../services/api";
 
 type DashboardSummary = {
   activeSystems: number;
@@ -53,14 +53,8 @@ export function DashboardModule() {
   useEffect(() => {
     async function loadSummary() {
       try {
-        const response = await fetch(`${API_URL}/dashboard/summary`);
-
-        if (!response.ok) {
-          throw new Error("Erro ao carregar resumo do dashboard");
-        }
-
-        const data: DashboardSummary = await response.json();
-        setSummary(data);
+        const response = await api.get<DashboardSummary>("/dashboard/summary");
+        setSummary(response.data);
       } catch (error) {
         console.error("Erro ao carregar resumo do dashboard:", error);
       }
@@ -72,18 +66,12 @@ export function DashboardModule() {
   useEffect(() => {
     async function loadActivities() {
       try {
-        const response = await fetch(
-          `${API_URL}/activities?page=${activitiesPage}&limit=5`,
+        const response = await api.get<ActivitiesResponse>(
+          `/activities?page=${activitiesPage}&limit=5`,
         );
 
-        if (!response.ok) {
-          throw new Error("Erro ao carregar atividades");
-        }
-
-        const data: ActivitiesResponse = await response.json();
-
-        setActivities(data.items);
-        setActivitiesPagination(data.pagination);
+        setActivities(response.data.items);
+        setActivitiesPagination(response.data.pagination);
       } catch (error) {
         console.error("Erro ao carregar atividades:", error);
       }

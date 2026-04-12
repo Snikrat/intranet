@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import { Utensils } from "lucide-react";
-import { API_URL } from "../../services/api";
+import { API_URL } from "../../config/env";
 
 type DayKey = "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
 

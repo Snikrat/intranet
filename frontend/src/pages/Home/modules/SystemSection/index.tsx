@@ -9,7 +9,7 @@ import {
   BarChart3,
   Boxes,
 } from "lucide-react";
-import { API_URL } from "../../../../services/api";
+import { API_URL } from "../../../../config/env";
 
 type SystemItem = {
   id: number;

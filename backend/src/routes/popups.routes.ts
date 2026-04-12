@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 import {
   getPopupsService,
   getPopupByIdService,
@@ -56,7 +57,7 @@ popupsRoutes.get("/popup/active", async (_req, res) => {
   }
 });
 
-popupsRoutes.post("/popups", async (req, res) => {
+popupsRoutes.post("/popups", ensureAuthenticated, async (req, res) => {
   try {
     const newPopup = await createPopupService(req.body);
     res.status(201).json(newPopup);
@@ -71,7 +72,7 @@ popupsRoutes.post("/popups", async (req, res) => {
   }
 });
 
-popupsRoutes.put("/popups/:id", async (req, res) => {
+popupsRoutes.put("/popups/:id", ensureAuthenticated, async (req, res) => {
   try {
     const id = Number(req.params.id);
 
@@ -96,7 +97,7 @@ popupsRoutes.put("/popups/:id", async (req, res) => {
   }
 });
 
-popupsRoutes.delete("/popups/:id", async (req, res) => {
+popupsRoutes.delete("/popups/:id", ensureAuthenticated, async (req, res) => {
   try {
     const id = Number(req.params.id);
 

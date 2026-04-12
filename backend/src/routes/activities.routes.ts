@@ -1,9 +1,10 @@
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 import { getActivitiesService } from "../services/activities.service.js";
 
 const activitiesRoutes = Router();
 
-activitiesRoutes.get("/activities", async (req, res) => {
+activitiesRoutes.get("/activities", ensureAuthenticated, async (req, res) => {
   try {
     const result = await getActivitiesService(
       req.query.page as string | undefined,

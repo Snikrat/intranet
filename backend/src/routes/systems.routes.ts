@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 import {
   getSystemsService,
   createSystemService,
@@ -18,7 +19,7 @@ systemsRoutes.get("/systems", async (_req, res) => {
   }
 });
 
-systemsRoutes.post("/systems", async (req, res) => {
+systemsRoutes.post("/systems", ensureAuthenticated, async (req, res) => {
   try {
     const newSystem = await createSystemService(req.body);
     res.status(201).json(newSystem);
@@ -33,7 +34,7 @@ systemsRoutes.post("/systems", async (req, res) => {
   }
 });
 
-systemsRoutes.put("/systems/:id", async (req, res) => {
+systemsRoutes.put("/systems/:id", ensureAuthenticated, async (req, res) => {
   try {
     const id = Number(req.params.id);
 
@@ -58,7 +59,7 @@ systemsRoutes.put("/systems/:id", async (req, res) => {
   }
 });
 
-systemsRoutes.delete("/systems/:id", async (req, res) => {
+systemsRoutes.delete("/systems/:id", ensureAuthenticated, async (req, res) => {
   try {
     const id = Number(req.params.id);
 

@@ -4,7 +4,7 @@ import { Button } from "../../../../components/Button";
 import { Modal } from "../../../../components/Modal";
 
 import styles from "./styles.module.css";
-import { API_URL } from "../../../../../../services/api";
+import { API_URL } from "../../../../../../config/env";
 
 export type CampaignLibraryImage = {
   id: number;

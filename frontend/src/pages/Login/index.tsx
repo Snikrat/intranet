@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Logo } from "../../components/Logo";
+import { api } from "../../services/api";
 
 export function Login() {
   const navigate = useNavigate();
@@ -10,20 +11,29 @@ export function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const validUsername = "admin";
-    const validPassword = "123";
+    setLoading(true);
+    setError("");
 
-    if (username === validUsername && password === validPassword) {
-      setError("");
+    try {
+      const response = await api.post("/auth/login", {
+        username,
+        password,
+      });
+
+      const { token } = response.data;
+
+      localStorage.setItem("@intranet:token", token);
       navigate("/admin");
-      return;
+    } catch {
+      setError("usuário ou senha inválidos");
+    } finally {
+      setLoading(false);
     }
-
-    setError("usuário ou senha inválidos");
   }
 
   return (
@@ -70,8 +80,8 @@ export function Login() {
 
           {error && <p className={styles.errorMessage}>{error}</p>}
 
-          <button type="submit" className={styles.button}>
-            Entrar
+          <button type="submit" className={styles.button} disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
       </section>

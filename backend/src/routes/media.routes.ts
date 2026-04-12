@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 import { upload } from "../config/multer.js";
 import {
   getMediaImagesService,
@@ -18,40 +19,49 @@ mediaRoutes.get("/media/images", async (_req, res) => {
   }
 });
 
-mediaRoutes.post("/media/images", upload.single("image"), async (req, res) => {
-  try {
-    const image = await createMediaImageService(req.file);
-    res.status(201).json(image);
-  } catch (error) {
-    console.error("Erro ao enviar imagem:", error);
+mediaRoutes.post(
+  "/media/images",
+  ensureAuthenticated,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const image = await createMediaImageService(req.file);
+      res.status(201).json(image);
+    } catch (error) {
+      console.error("Erro ao enviar imagem:", error);
 
-    if (error instanceof Error) {
-      return res.status(400).json({ message: error.message });
+      if (error instanceof Error) {
+        return res.status(400).json({ message: error.message });
+      }
+
+      res.status(500).json({ message: "Erro ao enviar imagem" });
     }
+  },
+);
 
-    res.status(500).json({ message: "Erro ao enviar imagem" });
-  }
-});
+mediaRoutes.delete(
+  "/media/images/:id",
+  ensureAuthenticated,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
 
-mediaRoutes.delete("/media/images/:id", async (req, res) => {
-  try {
-    const id = Number(req.params.id);
+      if (Number.isNaN(id)) {
+        return res.status(400).json({ message: "ID inválido" });
+      }
 
-    if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "ID inválido" });
+      await deleteMediaImageService(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Erro ao excluir imagem:", error);
+
+      if (error instanceof Error && error.message === "Imagem não encontrada") {
+        return res.status(404).json({ message: error.message });
+      }
+
+      res.status(500).json({ message: "Erro ao excluir imagem" });
     }
-
-    await deleteMediaImageService(id);
-    res.status(204).send();
-  } catch (error) {
-    console.error("Erro ao excluir imagem:", error);
-
-    if (error instanceof Error && error.message === "Imagem não encontrada") {
-      return res.status(404).json({ message: error.message });
-    }
-
-    res.status(500).json({ message: "Erro ao excluir imagem" });
-  }
-});
+  },
+);
 
 export { mediaRoutes };

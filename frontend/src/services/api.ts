@@ -1,1 +1,16 @@
-export const API_URL = "http://192.168.0.101:3000";
+import axios from "axios";
+import { API_URL } from "../config/env";
+
+export const api = axios.create({
+  baseURL: API_URL,
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("@intranet:token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});

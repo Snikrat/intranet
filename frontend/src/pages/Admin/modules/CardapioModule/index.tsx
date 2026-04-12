@@ -6,7 +6,8 @@ import { CardapioFormModal } from "./components/CardapioFormModal";
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { AdminSectionCard } from "../../components/AdminSectionCard";
 import { StatusBadge } from "../../components/StatusBadge";
-import { API_URL } from "../../../../services/api";
+import { API_URL } from "../../../../config/env";
+import { api } from "../../../../services/api";
 
 type DayKey = "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
 
@@ -80,29 +81,12 @@ async function getCurrentMenu(): Promise<WeeklyMenu> {
 }
 
 async function saveCurrentMenu(menu: WeeklyMenu): Promise<WeeklyMenu> {
-  const response = await fetch(`${API_URL}/menu/current`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(menu),
-  });
-
-  if (!response.ok) {
-    throw new Error("Erro ao salvar cardápio");
-  }
-
-  return response.json();
+  const response = await api.post<WeeklyMenu>("/menu/current", menu);
+  return response.data;
 }
 
 async function deleteCurrentMenu(): Promise<void> {
-  const response = await fetch(`${API_URL}/menu/current`, {
-    method: "DELETE",
-  });
-
-  if (!response.ok) {
-    throw new Error("Erro ao limpar cardápio");
-  }
+  await api.delete("/menu/current");
 }
 
 function convertDayToModal(day: DayMenu): ModalDayMenu {

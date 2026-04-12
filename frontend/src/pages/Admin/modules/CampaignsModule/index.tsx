@@ -16,7 +16,8 @@ import { AdminListItem } from "../../components/AdminListItem";
 import { StatusBadge } from "../../components/StatusBadge";
 import { IconActionButton } from "../../components/IconActionButton";
 import { Pagination } from "../../../../components/Pagination";
-import { API_URL } from "../../../../services/api";
+import { API_URL } from "../../../../config/env";
+import { api } from "../../../../services/api";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -289,28 +290,11 @@ export function CampaignsModule() {
   async function handleSaveConfirmed() {
     try {
       if (isCreatingCampaign || selectedCampaignId === null) {
-        const response = await fetch(`${API_URL}/campaigns`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(campaignFormData),
-        });
-
-        if (!response.ok) {
-          let errorMessage = "Erro ao criar campanha";
-
-          try {
-            const errorData = await response.json();
-            errorMessage = errorData.message || errorMessage;
-          } catch {
-            //
-          }
-
-          throw new Error(errorMessage);
-        }
-
-        const newCampaign: Campaign = await response.json();
+        const response = await api.post<Campaign>(
+          "/campaigns",
+          campaignFormData,
+        );
+        const newCampaign = response.data;
 
         setCampaigns((prev) => {
           const updated = [...prev, newCampaign];
@@ -331,31 +315,12 @@ export function CampaignsModule() {
         return;
       }
 
-      const response = await fetch(
-        `${API_URL}/campaigns/${selectedCampaignId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(campaignFormData),
-        },
+      const response = await api.put<Campaign>(
+        `/campaigns/${selectedCampaignId}`,
+        campaignFormData,
       );
 
-      if (!response.ok) {
-        let errorMessage = "Erro ao atualizar campanha";
-
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch {
-          //
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      const updatedCampaign: Campaign = await response.json();
+      const updatedCampaign = response.data;
 
       setCampaigns((prev) =>
         prev.map((campaign) =>
@@ -393,25 +358,7 @@ export function CampaignsModule() {
     if (selectedCampaignId === null || isCreatingCampaign) return;
 
     try {
-      const response = await fetch(
-        `${API_URL}/campaigns/${selectedCampaignId}`,
-        {
-          method: "DELETE",
-        },
-      );
-
-      if (!response.ok) {
-        let errorMessage = "Erro ao excluir campanha";
-
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch {
-          //
-        }
-
-        throw new Error(errorMessage);
-      }
+      await api.delete(`/campaigns/${selectedCampaignId}`);
 
       const updatedCampaigns = campaigns.filter(
         (campaign) => campaign.id !== selectedCampaignId,

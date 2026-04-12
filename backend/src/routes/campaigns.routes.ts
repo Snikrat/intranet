@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 import {
   getCampaignsService,
   createCampaignService,
@@ -18,7 +19,7 @@ campaignsRoutes.get("/campaigns", async (_req, res) => {
   }
 });
 
-campaignsRoutes.post("/campaigns", async (req, res) => {
+campaignsRoutes.post("/campaigns", ensureAuthenticated, async (req, res) => {
   try {
     const newCampaign = await createCampaignService(req.body);
     res.status(201).json(newCampaign);
@@ -33,7 +34,7 @@ campaignsRoutes.post("/campaigns", async (req, res) => {
   }
 });
 
-campaignsRoutes.put("/campaigns/:id", async (req, res) => {
+campaignsRoutes.put("/campaigns/:id", ensureAuthenticated, async (req, res) => {
   try {
     const id = Number(req.params.id);
 
@@ -58,25 +59,32 @@ campaignsRoutes.put("/campaigns/:id", async (req, res) => {
   }
 });
 
-campaignsRoutes.delete("/campaigns/:id", async (req, res) => {
-  try {
-    const id = Number(req.params.id);
+campaignsRoutes.delete(
+  "/campaigns/:id",
+  ensureAuthenticated,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
 
-    if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "ID inválido" });
+      if (Number.isNaN(id)) {
+        return res.status(400).json({ message: "ID inválido" });
+      }
+
+      await deleteCampaignService(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Erro ao remover campanha:", error);
+
+      if (
+        error instanceof Error &&
+        error.message === "Campanha não encontrada"
+      ) {
+        return res.status(404).json({ message: error.message });
+      }
+
+      res.status(500).json({ message: "Erro ao remover campanha" });
     }
-
-    await deleteCampaignService(id);
-    res.status(204).send();
-  } catch (error) {
-    console.error("Erro ao remover campanha:", error);
-
-    if (error instanceof Error && error.message === "Campanha não encontrada") {
-      return res.status(404).json({ message: error.message });
-    }
-
-    res.status(500).json({ message: "Erro ao remover campanha" });
-  }
-});
+  },
+);
 
 export { campaignsRoutes };

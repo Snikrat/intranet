@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ensureAuthenticated } from "../middlewares/auth.middleware.js";
 import {
   getCurrentMenuService,
   saveCurrentMenuService,
@@ -17,7 +18,7 @@ menuRoutes.get("/menu/current", async (_req, res) => {
   }
 });
 
-menuRoutes.post("/menu/current", async (req, res) => {
+menuRoutes.post("/menu/current", ensureAuthenticated, async (req, res) => {
   try {
     const savedMenu = await saveCurrentMenuService(req.body);
     res.json(savedMenu);
@@ -32,7 +33,7 @@ menuRoutes.post("/menu/current", async (req, res) => {
   }
 });
 
-menuRoutes.delete("/menu/current", async (_req, res) => {
+menuRoutes.delete("/menu/current", ensureAuthenticated, async (_req, res) => {
   try {
     await deleteCurrentMenuService();
     res.status(204).send();
