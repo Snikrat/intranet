@@ -1,0 +1,44 @@
+-- CreateTable
+CREATE TABLE "System" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "icon" TEXT NOT NULL,
+    "link" TEXT NOT NULL,
+    "order" INTEGER NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true
+);
+
+-- CreateTable
+CREATE TABLE "Campaign" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "order" INTEGER NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true
+);
+
+-- CreateTable
+CREATE TABLE "Activity" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "text" TEXT NOT NULL,
+    "time" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "PageView" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "page" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "SystemClick" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "systemName" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+

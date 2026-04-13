@@ -1,0 +1,47 @@
+.button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #d9dee7;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+/* padrão editar */
+.edit {
+  color: #2563eb;
+}
+
+.edit:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+/* excluir */
+.delete {
+  color: #dc2626;
+}
+
+.delete:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* interação */
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+}
+
+.button:active {
+  transform: scale(0.96);
+  box-shadow: none;
+}

@@ -1,0 +1,208 @@
+.emptyText {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.previewModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 10050;
+}
+
+.previewModal {
+  background: #ffffff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 760px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.24);
+  position: relative;
+  z-index: 10051;
+}
+
+.previewModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.previewModalTitle {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #081633;
+}
+
+.previewCloseButton {
+  border: none;
+  background: #f3f4f6;
+  border-radius: 999px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewArea {
+  position: relative;
+  min-height: 360px;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.previewAreaCentered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewBox,
+.previewFloatingBox {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 0;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.previewBox {
+  width: 100%;
+  max-width: 440px;
+}
+
+.previewFloatingBox {
+  width: min(360px, calc(100% - 24px));
+  position: absolute;
+}
+
+.previewClose {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.previewTitle {
+  font-weight: 800;
+  margin: 0 0 8px;
+  padding-right: 24px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  color: #111827;
+}
+
+.previewText {
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.previewText a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.previewText strong {
+  font-weight: 700;
+}
+
+.previewTopLeft .previewFloatingBox {
+  top: 20px;
+  left: 20px;
+}
+
+.previewTopRight .previewFloatingBox {
+  top: 20px;
+  right: 20px;
+}
+
+.previewBottomLeft .previewFloatingBox {
+  bottom: 20px;
+  left: 20px;
+}
+
+.previewBottomRight .previewFloatingBox {
+  bottom: 20px;
+  right: 20px;
+}
+
+.previewTopCenter .previewFloatingBox {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.previewBottomCenter .previewFloatingBox {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 800px) {
+  .previewModalOverlay {
+    padding: 12px;
+  }
+
+  .previewFloatingBox {
+    width: calc(100% - 24px);
+  }
+
+  .previewTopLeft .previewFloatingBox,
+  .previewTopRight .previewFloatingBox {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .previewBottomLeft .previewFloatingBox,
+  .previewBottomRight .previewFloatingBox {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .previewTopCenter .previewFloatingBox,
+  .previewBottomCenter .previewFloatingBox {
+    left: 12px;
+    right: 12px;
+    transform: none;
+  }
+
+  .previewTopCenter .previewFloatingBox {
+    top: 12px;
+  }
+
+  .previewBottomCenter .previewFloatingBox {
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .previewArea {
+    min-height: 300px;
+    padding: 12px;
+  }
+}
