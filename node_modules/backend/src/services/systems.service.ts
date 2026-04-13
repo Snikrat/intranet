@@ -7,6 +7,11 @@ type SystemBodyWithOrderConfirm = CreateOrUpdateSystemBody & {
   confirmReplaceOrder?: boolean;
 };
 
+type ReorderItemInput = {
+  id: number;
+  order: number;
+};
+
 async function normalizeOrders(tx: Prisma.TransactionClient) {
   const systems = await tx.system.findMany({
     orderBy: [{ order: "asc" }, { id: "asc" }],
@@ -142,7 +147,6 @@ export async function updateSystemService(
 
       if (confirmReplaceOrder) {
         if (nextOrder < currentSystem.order) {
-          // Subiu: quem estava entre destino e posição atual desce +1
           await tx.system.updateMany({
             where: {
               id: { not: id },
@@ -158,7 +162,6 @@ export async function updateSystemService(
             },
           });
         } else if (nextOrder > currentSystem.order) {
-          // Desceu: quem estava entre posição atual e destino sobe -1
           await tx.system.updateMany({
             where: {
               id: { not: id },
@@ -238,4 +241,44 @@ export async function deleteSystemService(id: number) {
   await addActivityService(`Sistema '${systemToDelete.title}' removido`);
 
   return systemToDelete;
+}
+
+export async function reorderSystemsService(items: ReorderItemInput[]) {
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new Error("Lista de reordenação inválida");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const systemIds = items.map((item) => item.id);
+    const existingSystems = await tx.system.findMany({
+      where: {
+        id: {
+          in: systemIds,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existingSystems.length !== items.length) {
+      throw new Error("Um ou mais sistemas não foram encontrados");
+    }
+
+    for (const item of items) {
+      const nextOrder =
+        typeof item.order === "number" && Number.isFinite(item.order)
+          ? Math.max(1, Math.floor(item.order))
+          : 1;
+
+      await tx.system.update({
+        where: { id: item.id },
+        data: { order: nextOrder },
+      });
+    }
+
+    await normalizeOrders(tx);
+  });
+
+  await addActivityService("Ordem dos sistemas atualizada");
 }

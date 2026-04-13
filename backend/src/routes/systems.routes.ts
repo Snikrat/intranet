@@ -5,6 +5,7 @@ import {
   createSystemService,
   updateSystemService,
   deleteSystemService,
+  reorderSystemsService,
 } from "../services/systems.service.js";
 
 const systemsRoutes = Router();
@@ -38,6 +39,23 @@ systemsRoutes.post("/systems", ensureAuthenticated, async (req, res) => {
     }
 
     return res.status(500).json({ message: "Erro ao criar sistema" });
+  }
+});
+
+systemsRoutes.put("/systems/reorder", ensureAuthenticated, async (req, res) => {
+  try {
+    await reorderSystemsService(req.body);
+    return res.status(200).json({
+      message: "Ordem dos sistemas atualizada com sucesso.",
+    });
+  } catch (error) {
+    console.error("Erro ao reordenar sistemas:", error);
+
+    if (error instanceof Error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: "Erro ao reordenar sistemas" });
   }
 });
 

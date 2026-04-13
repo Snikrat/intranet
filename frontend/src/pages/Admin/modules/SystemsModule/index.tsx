@@ -1,22 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
-import { Pencil, Trash2, LayoutGrid } from "lucide-react";
+import { Pencil, Trash2, LayoutGrid, GripVertical } from "lucide-react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { AdminSectionCard } from "../../components/AdminSectionCard";
-import { AdminListItem } from "../../components/AdminListItem";
 import { StatusBadge } from "../../components/StatusBadge";
 import { IconActionButton } from "../../components/IconActionButton";
-import { Pagination } from "../../../../components/Pagination";
-import styles from "../../styles.module.css";
+import styles from "./styles.module.css";
 import type { SystemCard } from "./types";
 import { emptySystemForm } from "./mock";
 import { AdminLayout } from "../../components/AdminLayout";
 import { SystemFormModal } from "./components/SystemFormModal";
 import { API_URL } from "../../../../config/env";
 import { api } from "../../../../services/api";
-
-const ITEMS_PER_PAGE = 5;
+import { useReorder } from "../../../../hooks/useReorder";
+import { ReorderableList } from "../../../../components/ReorderableList";
 
 type SystemFormErrors = {
   title: string;
@@ -55,7 +53,6 @@ export function SystemsModule() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isSystemFormOpen, setIsSystemFormOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [formData, setFormData] = useState<Omit<SystemCard, "id">>({
     ...emptySystemForm,
@@ -109,22 +106,17 @@ export function SystemsModule() {
     return [...systems].sort((a, b) => a.order - b.order);
   }, [systems]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(sortedSystems.length / ITEMS_PER_PAGE),
-  );
-
-  const paginatedSystems = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
-    return sortedSystems.slice(start, end);
-  }, [sortedSystems, currentPage]);
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
+  const { items, handleChange } = useReorder(sortedSystems, async (payload) => {
+    try {
+      await api.put("/systems/reorder", payload);
+      await reloadSystems();
+      toast.success("Ordem dos sistemas atualizada com sucesso.");
+    } catch (error: unknown) {
+      console.error("Erro ao reordenar sistemas:", error);
+      toast.error(getApiErrorMessage(error) || "Erro ao reordenar sistemas.");
+      await reloadSystems();
     }
-  }, [currentPage, totalPages]);
+  });
 
   function validateForm() {
     const newErrors: SystemFormErrors = {
@@ -222,7 +214,7 @@ export function SystemsModule() {
     setIsSystemFormOpen(true);
   }
 
-  function handleChange<K extends keyof Omit<SystemCard, "id">>(
+  function handleChangeField<K extends keyof Omit<SystemCard, "id">>(
     field: K,
     value: Omit<SystemCard, "id">[K],
   ) {
@@ -412,47 +404,87 @@ export function SystemsModule() {
       onNew={handleNewSystem}
     >
       <>
-        <AdminSectionCard
-          title="Cards cadastrados"
-          footer={
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          }
-        >
-          {paginatedSystems.length === 0 ? (
+        <AdminSectionCard title="Cards cadastrados">
+          {items.length === 0 ? (
             <p className={styles.emptyState}>Nenhum sistema cadastrado.</p>
           ) : (
-            paginatedSystems.map((system) => (
-              <AdminListItem
-                key={system.id}
-                title={system.title}
-                description={`ícone: ${system.icon} • posição: ${system.order}`}
-                icon={<LayoutGrid size={18} />}
-                status={<StatusBadge active={system.active} />}
-                actions={
-                  <>
-                    <IconActionButton
-                      label={`Editar sistema ${system.title}`}
-                      variant="edit"
-                      onClick={() => handleSelectSystem(system)}
-                    >
-                      <Pencil size={16} />
-                    </IconActionButton>
+            <ReorderableList<SystemCard>
+              items={items}
+              onChange={handleChange}
+              className={styles.cardsGrid}
+              itemClassName={styles.cardItem}
+              renderItem={(system: SystemCard, options) => {
+                const displayOrder =
+                  items.findIndex((item) => item.id === system.id) + 1;
 
-                    <IconActionButton
-                      label={`Excluir sistema ${system.title}`}
-                      variant="delete"
-                      onClick={() => handleDeleteRequest(system.id)}
-                    >
-                      <Trash2 size={16} />
-                    </IconActionButton>
-                  </>
-                }
-              />
-            ))
+                return (
+                  <div
+                    className={`${styles.systemCard} ${
+                      options?.isOverlay ? styles.systemCardOverlay : ""
+                    }`}
+                  >
+                    <div className={styles.systemCardTop}>
+                      <div className={styles.systemCardTitleWrap}>
+                        <div className={styles.systemCardIcon}>
+                          <LayoutGrid size={18} />
+                        </div>
+
+                        <div className={styles.systemCardText}>
+                          <h3 className={styles.systemCardTitle}>
+                            {system.title}
+                          </h3>
+                          <p className={styles.systemCardMeta}>
+                            ícone: {system.icon}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.dragHandle}
+                        title="Arrastar para reordenar"
+                        aria-label="Arrastar para reordenar"
+                        {...(options?.dragHandleProps?.attributes ?? {})}
+                        {...(options?.dragHandleProps?.listeners ?? {})}
+                      >
+                        <GripVertical size={16} />
+                      </button>
+                    </div>
+
+                    <div className={styles.systemCardBody}>
+                      <p className={styles.systemCardDescription}>
+                        {system.description}
+                      </p>
+                    </div>
+
+                    <div className={styles.systemCardInfo}>
+                      <span className={styles.systemOrderBadge}>
+                        posição: {displayOrder}
+                      </span>
+                      <StatusBadge active={system.active} />
+                    </div>
+
+                    <div className={styles.systemCardActions}>
+                      <IconActionButton
+                        label={`Editar sistema ${system.title}`}
+                        variant="edit"
+                        onClick={() => handleSelectSystem(system)}
+                      >
+                        <Pencil size={16} />
+                      </IconActionButton>
+
+                      <IconActionButton
+                        label={`Excluir sistema ${system.title}`}
+                        variant="delete"
+                        onClick={() => handleDeleteRequest(system.id)}
+                      >
+                        <Trash2 size={16} />
+                      </IconActionButton>
+                    </div>
+                  </div>
+                );
+              }}
+            />
           )}
         </AdminSectionCard>
 
@@ -462,7 +494,7 @@ export function SystemsModule() {
           onSubmit={handleSaveRequest}
           onDelete={() => handleDeleteRequest()}
           onClear={handleClearSystemForm}
-          onChange={handleChange}
+          onChange={handleChangeField}
           isCreating={isCreating}
           canDelete={!isCreating && selectedId !== null}
           formData={formData}

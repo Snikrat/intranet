@@ -7,6 +7,11 @@ type CampaignBodyWithOrderConfirm = CreateOrUpdateCampaignBody & {
   confirmReplaceOrder?: boolean;
 };
 
+type ReorderItemInput = {
+  id: number;
+  order: number;
+};
+
 async function normalizeOrders(tx: Prisma.TransactionClient) {
   const campaigns = await tx.campaign.findMany({
     orderBy: [{ order: "asc" }, { id: "asc" }],
@@ -234,4 +239,44 @@ export async function deleteCampaignService(id: number) {
   await addActivityService(`Campanha '${campaignToDelete.title}' removida`);
 
   return campaignToDelete;
+}
+
+export async function reorderCampaignsService(items: ReorderItemInput[]) {
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new Error("Lista de reordenação inválida");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const campaignIds = items.map((item) => item.id);
+    const existingCampaigns = await tx.campaign.findMany({
+      where: {
+        id: {
+          in: campaignIds,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existingCampaigns.length !== items.length) {
+      throw new Error("Uma ou mais campanhas não foram encontradas");
+    }
+
+    for (const item of items) {
+      const nextOrder =
+        typeof item.order === "number" && Number.isFinite(item.order)
+          ? Math.max(1, Math.floor(item.order))
+          : 1;
+
+      await tx.campaign.update({
+        where: { id: item.id },
+        data: { order: nextOrder },
+      });
+    }
+
+    await normalizeOrders(tx);
+  });
+
+  await addActivityService("Ordem das campanhas atualizada");
 }

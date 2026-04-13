@@ -5,6 +5,7 @@ import {
   createCampaignService,
   updateCampaignService,
   deleteCampaignService,
+  reorderCampaignsService,
 } from "../services/campaigns.service.js";
 
 const campaignsRoutes = Router();
@@ -40,6 +41,27 @@ campaignsRoutes.post("/campaigns", ensureAuthenticated, async (req, res) => {
     return res.status(500).json({ message: "Erro ao criar campanha" });
   }
 });
+
+campaignsRoutes.put(
+  "/campaigns/reorder",
+  ensureAuthenticated,
+  async (req, res) => {
+    try {
+      await reorderCampaignsService(req.body);
+      return res.status(200).json({
+        message: "Ordem das campanhas atualizada com sucesso.",
+      });
+    } catch (error) {
+      console.error("Erro ao reordenar campanhas:", error);
+
+      if (error instanceof Error) {
+        return res.status(400).json({ message: error.message });
+      }
+
+      return res.status(500).json({ message: "Erro ao reordenar campanhas" });
+    }
+  },
+);
 
 campaignsRoutes.put("/campaigns/:id", ensureAuthenticated, async (req, res) => {
   try {

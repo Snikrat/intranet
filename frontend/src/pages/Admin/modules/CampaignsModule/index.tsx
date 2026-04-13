@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Image, Pencil, Trash2 } from "lucide-react";
+import { Image, Pencil, Trash2, GripVertical } from "lucide-react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import styles from "../../styles.module.css";
+import styles from "./styles.module.css";
 import type { Campaign } from "./types";
 import { AdminLayout } from "../../components/AdminLayout";
 import { CampaignFormModal } from "./components/CampaignFormModal";
@@ -13,14 +13,12 @@ import {
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { emptyCampaignForm } from "./mock";
 import { AdminSectionCard } from "../../components/AdminSectionCard";
-import { AdminListItem } from "../../components/AdminListItem";
 import { StatusBadge } from "../../components/StatusBadge";
 import { IconActionButton } from "../../components/IconActionButton";
-import { Pagination } from "../../../../components/Pagination";
 import { API_URL } from "../../../../config/env";
 import { api } from "../../../../services/api";
-
-const ITEMS_PER_PAGE = 5;
+import { useReorder } from "../../../../hooks/useReorder";
+import { ReorderableList } from "../../../../components/ReorderableList";
 
 type CampaignFormErrors = {
   title: string;
@@ -63,7 +61,6 @@ export function CampaignsModule() {
   const [isCampaignFormOpen, setIsCampaignFormOpen] = useState(false);
   const [isImageLibraryOpen, setIsImageLibraryOpen] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [campaignFormData, setCampaignFormData] = useState<
     Omit<Campaign, "id">
@@ -118,22 +115,22 @@ export function CampaignsModule() {
     return [...campaigns].sort((a, b) => a.order - b.order);
   }, [campaigns]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(sortedCampaigns.length / ITEMS_PER_PAGE),
+  const { items, handleChange } = useReorder(
+    sortedCampaigns,
+    async (payload) => {
+      try {
+        await api.put("/campaigns/reorder", payload);
+        await reloadCampaigns();
+        toast.success("Ordem das campanhas atualizada com sucesso.");
+      } catch (error: unknown) {
+        console.error("Erro ao reordenar campanhas:", error);
+        toast.error(
+          getApiErrorMessage(error) || "Erro ao reordenar campanhas.",
+        );
+        await reloadCampaigns();
+      }
+    },
   );
-
-  const paginatedCampaigns = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
-    return sortedCampaigns.slice(start, end);
-  }, [sortedCampaigns, currentPage]);
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
 
   function getImagePreviewUrl(image: string) {
     if (!image?.trim()) return "";
@@ -464,55 +461,86 @@ export function CampaignsModule() {
       onNew={handleNewCampaign}
     >
       <>
-        <AdminSectionCard
-          title="Campanhas cadastradas"
-          footer={
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          }
-        >
-          {paginatedCampaigns.length === 0 ? (
+        <AdminSectionCard title="Campanhas cadastradas">
+          {items.length === 0 ? (
             <p className={styles.emptyState}>Nenhuma campanha cadastrada.</p>
           ) : (
-            paginatedCampaigns.map((campaign) => (
-              <AdminListItem
-                key={campaign.id}
-                title={campaign.title}
-                description={`imagem: ${
-                  campaign.image ? "selecionada" : "sem imagem"
-                } • posição: ${campaign.order}`}
-                icon={<Image size={18} />}
-                status={
-                  <StatusBadge
-                    active={campaign.active}
-                    activeLabel="Ativa"
-                    inactiveLabel="Inativa"
-                  />
-                }
-                actions={
-                  <>
-                    <IconActionButton
-                      label={`Editar campanha ${campaign.title}`}
-                      variant="edit"
-                      onClick={() => handleSelectCampaign(campaign)}
-                    >
-                      <Pencil size={16} />
-                    </IconActionButton>
+            <ReorderableList<Campaign>
+              items={items}
+              onChange={handleChange}
+              className={styles.cardsGrid}
+              itemClassName={styles.cardItem}
+              renderItem={(campaign: Campaign, options) => {
+                const displayOrder =
+                  items.findIndex((item) => item.id === campaign.id) + 1;
 
-                    <IconActionButton
-                      label={`Excluir campanha ${campaign.title}`}
-                      variant="delete"
-                      onClick={() => handleDeleteRequest(campaign.id)}
-                    >
-                      <Trash2 size={16} />
-                    </IconActionButton>
-                  </>
-                }
-              />
-            ))
+                return (
+                  <div
+                    className={`${styles.systemCard} ${
+                      options?.isOverlay ? styles.systemCardOverlay : ""
+                    }`}
+                  >
+                    <div className={styles.systemCardTop}>
+                      <div className={styles.systemCardTitleWrap}>
+                        <div className={styles.systemCardIcon}>
+                          <Image size={18} />
+                        </div>
+
+                        <div className={styles.systemCardText}>
+                          <h3 className={styles.systemCardTitle}>
+                            {campaign.title}
+                          </h3>
+                          <p className={styles.systemCardMeta}>
+                            imagem:{" "}
+                            {campaign.image ? "selecionada" : "sem imagem"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.dragHandle}
+                        title="Arrastar para reordenar"
+                        aria-label="Arrastar para reordenar"
+                        {...(options?.dragHandleProps?.attributes ?? {})}
+                        {...(options?.dragHandleProps?.listeners ?? {})}
+                      >
+                        <GripVertical size={16} />
+                      </button>
+                    </div>
+
+                    <div className={styles.systemCardInfo}>
+                      <span className={styles.systemOrderBadge}>
+                        posição: {displayOrder}
+                      </span>
+                      <StatusBadge
+                        active={campaign.active}
+                        activeLabel="Ativa"
+                        inactiveLabel="Inativa"
+                      />
+                    </div>
+
+                    <div className={styles.systemCardActions}>
+                      <IconActionButton
+                        label={`Editar campanha ${campaign.title}`}
+                        variant="edit"
+                        onClick={() => handleSelectCampaign(campaign)}
+                      >
+                        <Pencil size={16} />
+                      </IconActionButton>
+
+                      <IconActionButton
+                        label={`Excluir campanha ${campaign.title}`}
+                        variant="delete"
+                        onClick={() => handleDeleteRequest(campaign.id)}
+                      >
+                        <Trash2 size={16} />
+                      </IconActionButton>
+                    </div>
+                  </div>
+                );
+              }}
+            />
           )}
         </AdminSectionCard>
 
