@@ -4,8 +4,6 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { AdminSectionCard } from "../../components/AdminSectionCard";
-import { StatusBadge } from "../../components/StatusBadge";
-import { IconActionButton } from "../../components/IconActionButton";
 import styles from "./styles.module.css";
 import type { SystemCard } from "./types";
 import { emptySystemForm } from "./mock";
@@ -15,6 +13,7 @@ import { API_URL } from "../../../../config/env";
 import { api } from "../../../../services/api";
 import { useReorder } from "../../../../hooks/useReorder";
 import { ReorderableList } from "../../../../components/ReorderableList";
+import { BaseCard } from "../../components/BaseCard";
 
 type SystemFormErrors = {
   title: string;
@@ -418,12 +417,12 @@ export function SystemsModule() {
                   items.findIndex((item) => item.id === system.id) + 1;
 
                 return (
-                  <div
-                    className={`${styles.systemCard} ${
+                  <BaseCard
+                    className={
                       options?.isOverlay ? styles.systemCardOverlay : ""
-                    }`}
+                    }
                   >
-                    <div className={styles.systemCardTop}>
+                    <BaseCard.Header>
                       <div className={styles.systemCardTitleWrap}>
                         <div className={styles.systemCardIcon}>
                           <LayoutGrid size={18} />
@@ -439,49 +438,47 @@ export function SystemsModule() {
                         </div>
                       </div>
 
-                      <button
-                        type="button"
-                        className={styles.dragHandle}
-                        title="Arrastar para reordenar"
-                        aria-label="Arrastar para reordenar"
-                        {...(options?.dragHandleProps?.attributes ?? {})}
-                        {...(options?.dragHandleProps?.listeners ?? {})}
+                      <BaseCard.DragHandle
+                        attributes={options?.dragHandleProps?.attributes}
+                        listeners={options?.dragHandleProps?.listeners}
                       >
                         <GripVertical size={16} />
-                      </button>
-                    </div>
+                      </BaseCard.DragHandle>
+                    </BaseCard.Header>
 
-                    <div className={styles.systemCardBody}>
-                      <p className={styles.systemCardDescription}>
-                        {system.description}
-                      </p>
-                    </div>
+                    <BaseCard.Body>
+                      <div className={styles.systemCardBody}>
+                        <p className={styles.systemCardDescription}>
+                          {system.description}
+                        </p>
+                      </div>
 
-                    <div className={styles.systemCardInfo}>
-                      <span className={styles.systemOrderBadge}>
-                        posição: {displayOrder}
-                      </span>
-                      <StatusBadge active={system.active} />
-                    </div>
+                      <div className={styles.systemCardInfo}>
+                        <span className={styles.systemOrderBadge}>
+                          posição: {displayOrder}
+                        </span>
+                        <BaseCard.StatusBadge active={system.active} />
+                      </div>
+                    </BaseCard.Body>
 
-                    <div className={styles.systemCardActions}>
-                      <IconActionButton
+                    <BaseCard.Footer>
+                      <BaseCard.IconActionButton
                         label={`Editar sistema ${system.title}`}
                         variant="edit"
                         onClick={() => handleSelectSystem(system)}
                       >
                         <Pencil size={16} />
-                      </IconActionButton>
+                      </BaseCard.IconActionButton>
 
-                      <IconActionButton
+                      <BaseCard.IconActionButton
                         label={`Excluir sistema ${system.title}`}
                         variant="delete"
                         onClick={() => handleDeleteRequest(system.id)}
                       >
                         <Trash2 size={16} />
-                      </IconActionButton>
-                    </div>
-                  </div>
+                      </BaseCard.IconActionButton>
+                    </BaseCard.Footer>
+                  </BaseCard>
                 );
               }}
             />

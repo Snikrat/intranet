@@ -7,8 +7,7 @@ import { PopupFormModal } from "./components/PopupFormModal";
 import { AdminLayout } from "../../components/AdminLayout";
 import { AdminSectionCard } from "../../components/AdminSectionCard";
 import { AdminListItem } from "../../components/AdminListItem";
-import { StatusBadge } from "../../components/StatusBadge";
-import { IconActionButton } from "../../components/IconActionButton";
+import { BaseCard } from "../../components/BaseCard";
 import { Pagination } from "../../../../components/Pagination";
 import styles from "./styles.module.css";
 import type { CustomSelectOption } from "../../../../components/CustomSelect";
@@ -405,24 +404,24 @@ export function PopupModule() {
                     <CircleOff size={18} />
                   )
                 }
-                status={<StatusBadge active={popup.active} />}
+                status={<BaseCard.StatusBadge active={popup.active} />}
                 actions={
                   <>
-                    <IconActionButton
+                    <BaseCard.IconActionButton
                       label="Editar popup"
                       variant="edit"
                       onClick={() => openEditModal(popup)}
                     >
                       <Pencil size={16} />
-                    </IconActionButton>
+                    </BaseCard.IconActionButton>
 
-                    <IconActionButton
+                    <BaseCard.IconActionButton
                       label="Excluir popup"
                       variant="delete"
                       onClick={() => openDeleteConfirm(popup.id)}
                     >
                       <Trash2 size={16} />
-                    </IconActionButton>
+                    </BaseCard.IconActionButton>
                   </>
                 }
               />

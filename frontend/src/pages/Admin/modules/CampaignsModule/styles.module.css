@@ -25,49 +25,15 @@
   position: relative;
 }
 
-/* CARD */
-.systemCard {
-  position: relative;
-  height: 100%;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 16px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease,
-    border-color 220ms ease,
-    opacity 180ms ease;
-  will-change: transform;
-}
-
-.systemCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
-  border-color: #dbe3ee;
-}
-
 /* CARD DO OVERLAY/GHOST */
-.systemCardOverlay {
+.campaignCardOverlay {
   box-shadow: 0 22px 44px rgba(15, 23, 42, 0.18);
   border-color: #cbd5e1;
   transform: rotate(1.5deg) scale(1.02);
 }
 
-/* TOPO */
-.systemCardTop {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.systemCardTitleWrap {
+/* TOPO / CONTEÚDO ESPECÍFICO DO MÓDULO */
+.campaignCardTitleWrap {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -75,7 +41,7 @@
   flex: 1;
 }
 
-.systemCardIcon {
+.campaignCardIcon {
   width: 40px;
   height: 40px;
   border-radius: 12px;
@@ -87,11 +53,11 @@
   flex-shrink: 0;
 }
 
-.systemCardText {
+.campaignCardText {
   min-width: 0;
 }
 
-.systemCardTitle {
+.campaignCardTitle {
   margin: 0;
   font-size: 0.98rem;
   font-weight: 700;
@@ -100,54 +66,19 @@
   word-break: break-word;
 }
 
-.systemCardMeta {
+.campaignCardMeta {
   margin: 4px 0 0;
   font-size: 0.78rem;
   color: #6b7280;
   word-break: break-word;
 }
 
-/* HANDLE DE ARRASTAR */
-.dragHandle {
-  width: 32px;
-  height: 32px;
-  border: none;
-  outline: none;
-  border-radius: 10px;
-  color: #94a3b8;
-  background: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  cursor: grab;
-  transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    transform 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.dragHandle:hover {
-  background: #eef2ff;
-  color: #475569;
-}
-
-.dragHandle:active {
-  cursor: grabbing;
-  transform: scale(0.96);
-}
-
-.dragHandle:focus-visible {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
-}
-
 /* CORPO */
-.systemCardBody {
+.campaignCardBody {
   min-height: 48px;
 }
 
-.systemCardDescription {
+.campaignCardDescription {
   margin: 0;
   font-size: 0.88rem;
   line-height: 1.5;
@@ -156,7 +87,7 @@
 }
 
 /* INFO */
-.systemCardInfo {
+.campaignCardInfo {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -164,7 +95,7 @@
   flex-wrap: wrap;
 }
 
-.systemOrderBadge {
+.campaignOrderBadge {
   display: inline-flex;
   align-items: center;
   min-height: 28px;
@@ -174,14 +105,6 @@
   color: #334155;
   font-size: 0.75rem;
   font-weight: 600;
-}
-
-/* AÇÕES */
-.systemCardActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: auto;
 }
 
 /* EMPTY STATE */
@@ -222,9 +145,4 @@
   .cardsGrid {
     grid-template-columns: 1fr;
   }
-}
-
-.systemCard {
-  gap: 10px;
-  padding: 14px;
 }

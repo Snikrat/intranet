@@ -4,6 +4,7 @@
   font-size: 0.95rem;
 }
 
+/* OVERLAY */
 .previewModalOverlay {
   position: fixed;
   inset: 0;
@@ -15,23 +16,23 @@
   z-index: 10050;
 }
 
+/* MODAL */
 .previewModal {
-  background: #ffffff;
-  border-radius: 18px;
+  position: relative;
+  z-index: 10051;
   width: 100%;
   max-width: 760px;
   overflow: hidden;
+  background: #ffffff;
+  border-radius: 18px;
   box-shadow: 0 30px 80px rgba(15, 23, 42, 0.24);
-  position: relative;
-  z-index: 10051;
 }
 
 .previewModalHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
-  margin: 0;
   padding: 18px 20px;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -44,18 +45,18 @@
 }
 
 .previewCloseButton {
-  border: none;
-  background: #f3f4f6;
-  border-radius: 999px;
   width: 36px;
   height: 36px;
-  min-width: 36px;
+  border: none;
+  border-radius: 999px;
+  background: #f3f4f6;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* ÁREA DE PREVIEW */
 .previewArea {
   position: relative;
   min-height: 360px;
@@ -70,13 +71,14 @@
   justify-content: center;
 }
 
+/* BOX */
 .previewBox,
 .previewFloatingBox {
+  position: relative;
+  min-width: 0;
+  padding: 20px;
   background: #ffffff;
   border-radius: 16px;
-  padding: 20px;
-  min-width: 0;
-  position: relative;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
@@ -86,10 +88,11 @@
 }
 
 .previewFloatingBox {
-  width: min(360px, calc(100% - 24px));
   position: absolute;
+  width: min(360px, calc(100% - 24px));
 }
 
+/* BOTÃO FECHAR */
 .previewClose {
   position: absolute;
   top: 8px;
@@ -97,18 +100,18 @@
   border: none;
   background: transparent;
   font-size: 1.4rem;
-  cursor: pointer;
   color: #64748b;
+  cursor: pointer;
 }
 
+/* TEXTO */
 .previewTitle {
-  font-weight: 800;
   margin: 0 0 8px;
   padding-right: 24px;
+  font-weight: 800;
+  color: #111827;
   white-space: pre-wrap;
   word-break: break-word;
-  overflow-wrap: anywhere;
-  color: #111827;
 }
 
 .previewText {
@@ -117,18 +120,9 @@
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
-  overflow-wrap: anywhere;
 }
 
-.previewText a {
-  color: #2563eb;
-  text-decoration: underline;
-}
-
-.previewText strong {
-  font-weight: 700;
-}
-
+/* POSIÇÕES */
 .previewTopLeft .previewFloatingBox {
   top: 20px;
   left: 20px;
@@ -161,6 +155,7 @@
   transform: translateX(-50%);
 }
 
+/* RESPONSIVO */
 @media (max-width: 800px) {
   .previewModalOverlay {
     padding: 12px;

@@ -13,8 +13,7 @@ import {
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { emptyCampaignForm } from "./mock";
 import { AdminSectionCard } from "../../components/AdminSectionCard";
-import { StatusBadge } from "../../components/StatusBadge";
-import { IconActionButton } from "../../components/IconActionButton";
+import { BaseCard } from "../../components/BaseCard";
 import { API_URL } from "../../../../config/env";
 import { api } from "../../../../services/api";
 import { useReorder } from "../../../../hooks/useReorder";
@@ -475,69 +474,68 @@ export function CampaignsModule() {
                   items.findIndex((item) => item.id === campaign.id) + 1;
 
                 return (
-                  <div
-                    className={`${styles.systemCard} ${
-                      options?.isOverlay ? styles.systemCardOverlay : ""
-                    }`}
+                  <BaseCard
+                    className={
+                      options?.isOverlay ? styles.campaignCardOverlay : ""
+                    }
                   >
-                    <div className={styles.systemCardTop}>
-                      <div className={styles.systemCardTitleWrap}>
-                        <div className={styles.systemCardIcon}>
+                    <BaseCard.Header>
+                      <div className={styles.campaignCardTitleWrap}>
+                        <div className={styles.campaignCardIcon}>
                           <Image size={18} />
                         </div>
 
-                        <div className={styles.systemCardText}>
-                          <h3 className={styles.systemCardTitle}>
+                        <div className={styles.campaignCardText}>
+                          <h3 className={styles.campaignCardTitle}>
                             {campaign.title}
                           </h3>
-                          <p className={styles.systemCardMeta}>
+                          <p className={styles.campaignCardMeta}>
                             imagem:{" "}
                             {campaign.image ? "selecionada" : "sem imagem"}
                           </p>
                         </div>
                       </div>
 
-                      <button
-                        type="button"
-                        className={styles.dragHandle}
-                        title="Arrastar para reordenar"
-                        aria-label="Arrastar para reordenar"
-                        {...(options?.dragHandleProps?.attributes ?? {})}
-                        {...(options?.dragHandleProps?.listeners ?? {})}
+                      <BaseCard.DragHandle
+                        attributes={options?.dragHandleProps?.attributes}
+                        listeners={options?.dragHandleProps?.listeners}
                       >
                         <GripVertical size={16} />
-                      </button>
-                    </div>
+                      </BaseCard.DragHandle>
+                    </BaseCard.Header>
 
-                    <div className={styles.systemCardInfo}>
-                      <span className={styles.systemOrderBadge}>
-                        posição: {displayOrder}
-                      </span>
-                      <StatusBadge
-                        active={campaign.active}
-                        activeLabel="Ativa"
-                        inactiveLabel="Inativa"
-                      />
-                    </div>
+                    <BaseCard.Body>
+                      <div className={styles.campaignCardInfo}>
+                        <span className={styles.campaignOrderBadge}>
+                          posição: {displayOrder}
+                        </span>
 
-                    <div className={styles.systemCardActions}>
-                      <IconActionButton
+                        <BaseCard.StatusBadge
+                          active={campaign.active}
+                          activeLabel="Ativa"
+                          inactiveLabel="Inativa"
+                        />
+                      </div>
+                    </BaseCard.Body>
+
+                    <BaseCard.Footer>
+                      <BaseCard.IconActionButton
                         label={`Editar campanha ${campaign.title}`}
                         variant="edit"
                         onClick={() => handleSelectCampaign(campaign)}
                       >
                         <Pencil size={16} />
-                      </IconActionButton>
+                      </BaseCard.IconActionButton>
 
-                      <IconActionButton
+                      <BaseCard.IconActionButton
                         label={`Excluir campanha ${campaign.title}`}
                         variant="delete"
                         onClick={() => handleDeleteRequest(campaign.id)}
                       >
                         <Trash2 size={16} />
-                      </IconActionButton>
-                    </div>
-                  </div>
+                      </BaseCard.IconActionButton>
+                    </BaseCard.Footer>
+                  </BaseCard>
                 );
               }}
             />
