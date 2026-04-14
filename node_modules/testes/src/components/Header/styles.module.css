@@ -8,7 +8,7 @@
 
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -58,7 +58,9 @@
 .navbar {
   flex: 1;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   background: #ffffff;
   border-radius: 14px;
   padding: 10px 20px;
@@ -67,11 +69,13 @@
 }
 
 .menu {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .menuLink {
@@ -159,41 +163,36 @@
   color: #b91c1c;
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-}
-
-.adminButton {
+.settingsButton {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-width: 150px;
-  height: 46px;
-  padding: 0 18px;
-  border-radius: 12px;
-  background: #b91c1c;
-  color: #ffffff;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #64748b;
   text-decoration: none;
-  font-size: 1rem;
-  font-weight: 700;
-  white-space: nowrap;
+  border-radius: 8px;
   transition:
-    background 0.2s ease,
+    color 0.2s ease,
     transform 0.2s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 8px 20px rgba(185, 28, 28, 0.18);
+    background 0.2s ease;
 }
 
-.adminButton:hover {
-  background: #991b1b;
+.settingsButton:hover {
+  color: #b91c1c;
+  background: #fff5f5;
+  transform: rotate(20deg);
 }
 
-.adminButton:active {
-  transform: scale(0.98);
+.settingsButton:active {
+  transform: scale(0.95);
 }
+
+/* RESPONSIVO */
 
 @media (max-width: 1100px) {
   .wrapper {
@@ -206,6 +205,7 @@
 
   .navbar {
     padding: 10px 16px;
+    gap: 12px;
   }
 
   .menuLink {
@@ -216,9 +216,9 @@
     font-size: 0.98rem;
   }
 
-  .adminButton {
-    min-width: 132px;
-    font-size: 0.95rem;
+  .settingsButton {
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -256,7 +256,10 @@
 
   .navbar {
     width: 100%;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
     background: transparent;
     box-shadow: none;
     border-radius: 0;
@@ -267,6 +270,7 @@
     width: 100%;
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
     gap: 8px;
   }
 
@@ -300,14 +304,10 @@
     border: 1px solid #e5e7eb;
   }
 
-  .actions {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .adminButton {
-    width: 100%;
-    min-width: 0;
+  .settingsButton {
+    align-self: flex-end;
+    width: 32px;
+    height: 32px;
   }
 }
 
@@ -329,8 +329,8 @@
     font-size: 0.92rem;
   }
 
-  .adminButton {
-    height: 44px;
-    font-size: 0.95rem;
+  .settingsButton {
+    width: 30px;
+    height: 30px;
   }
 }

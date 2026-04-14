@@ -1,0 +1,337 @@
+.wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+  background: #ffffff;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.header {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.description {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+.content {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+.previewArea {
+  background: #f1f5f9;
+  border-radius: 28px;
+  padding: 18px;
+}
+
+.signatureCard {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 0;
+  background: #ffffff;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.signatureBar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.signatureContent {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.logoBox {
+  height: 96px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+.info {
+  border-left: 4px solid;
+  padding-left: 20px;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 900;
+  line-height: 1.05;
+  color: #0f172a;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.role {
+  margin: 10px 0 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.contactList {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.contactList p {
+  margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.emailText {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.miniCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.miniLabel {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #64748b;
+}
+
+.miniPreview {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 0;
+  background: #ffffff;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  max-width: 100%;
+}
+
+.miniLogo {
+  width: 80px;
+  height: 48px;
+  margin-right: 12px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.miniInfo {
+  border-left: 2px solid;
+  padding-left: 12px;
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.miniName {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.miniRole {
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.miniText {
+  font-size: 0.76rem;
+  color: #64748b;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.infoBox {
+  border-radius: 24px;
+  padding: 18px;
+}
+
+.infoTitle {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1e293b;
+}
+
+.infoList {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.92rem;
+  color: #334155;
+}
+
+.infoList p {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    border-radius: 24px;
+  }
+
+  .header,
+  .content {
+    padding: 18px;
+  }
+
+  .previewArea {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .signatureCard {
+    padding: 16px;
+  }
+
+  .signatureContent {
+    grid-template-columns: 1fr;
+  }
+
+  .logoBox {
+    height: 84px;
+    font-size: 1.4rem;
+  }
+
+  .info {
+    border-left: none;
+    border-top: 4px solid;
+    padding-left: 0;
+    padding-top: 14px;
+  }
+
+  .name {
+    font-size: 1.5rem;
+  }
+
+  .miniPreview {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .miniLogo {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .miniInfo {
+    border-left: none;
+    border-top: 2px solid;
+    padding-left: 0;
+    padding-top: 10px;
+  }
+}
+
+.logoBox {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.logoImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.logoFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+.miniLogo {
+  width: 80px;
+  height: 48px;
+  margin-right: 12px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.miniLogoImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.miniLogoFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #ffffff;
+}

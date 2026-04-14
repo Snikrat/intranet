@@ -37,6 +37,65 @@ const days = [
   { key: "friday", label: "Sexta" },
 ] as const;
 
+function getTextareaValue(day: DayMenu) {
+  if (day.isHoliday) return "Feriado";
+  if (day.isUndefined) return "A definir";
+  return day.meals.join("\n");
+}
+
+function getTextareaPlaceholder(day: DayMenu) {
+  if (day.isHoliday) return "Dia marcado como feriado";
+  if (day.isUndefined) return "Cardápio ainda não enviado";
+  return "Digite um item por linha\nEx:\nFrango grelhado\nArroz\nFeijão";
+}
+
+function getDayStatus(day: DayMenu) {
+  if (day.isHoliday) {
+    return {
+      label: "Feriado",
+      className: "statusHoliday",
+    };
+  }
+
+  if (day.isUndefined) {
+    return {
+      label: "A definir",
+      className: "statusUndefined",
+    };
+  }
+
+  if (day.meals.some((meal) => meal.trim())) {
+    return {
+      label: "Preenchido",
+      className: "statusFilled",
+    };
+  }
+
+  return {
+    label: "Vazio",
+    className: "statusEmpty",
+  };
+}
+
+function getSummary(data: WeeklyMenu) {
+  const values = Object.values(data);
+
+  const holidayCount = values.filter((day) => day.isHoliday).length;
+  const undefinedCount = values.filter((day) => day.isUndefined).length;
+  const filledCount = values.filter(
+    (day) =>
+      !day.isHoliday &&
+      !day.isUndefined &&
+      day.meals.some((meal) => meal.trim()),
+  ).length;
+
+  return {
+    filledCount,
+    undefinedCount,
+    holidayCount,
+  };
+}
+
 export function CardapioFormModal({
   open,
   onClose,
@@ -45,27 +104,31 @@ export function CardapioFormModal({
   onChange,
   data,
 }: Props) {
-  function getTextareaValue(day: DayMenu) {
-    if (day.isHoliday) return "Feriado";
-    if (day.isUndefined) return "A definir";
-    return day.meals.join("\n");
-  }
-
-  function getTextareaPlaceholder(day: DayMenu) {
-    if (day.isHoliday) return "Feriado";
-    if (day.isUndefined) return "A definir";
-    return "Digite as refeições...";
-  }
+  const summary = getSummary(data);
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="Editar cardápio"
-      subtitle="Atualize o cardápio da semana"
+      title="Editar cardápio da semana"
+      subtitle="Preencha os dias de segunda a sexta. Você pode deixar dias como “A definir” e atualizar depois."
       size="xl"
       footer={
         <div className={styles.footer}>
+          <div className={styles.footerInfo}>
+            <span className={styles.footerInfoItem}>
+              {summary.filledCount} preenchido
+              {summary.filledCount !== 1 ? "s" : ""}
+            </span>
+            <span className={styles.footerInfoItem}>
+              {summary.undefinedCount} a definir
+            </span>
+            <span className={styles.footerInfoItem}>
+              {summary.holidayCount} feriado
+              {summary.holidayCount !== 1 ? "s" : ""}
+            </span>
+          </div>
+
           <div className={styles.footerRight}>
             {onClear && (
               <Button type="button" variant="secondary" onClick={onClear}>
@@ -78,7 +141,7 @@ export function CardapioFormModal({
             </Button>
 
             <Button type="button" variant="primary" onClick={onSubmit}>
-              Salvar
+              Salvar alterações
             </Button>
           </div>
         </div>
@@ -88,10 +151,20 @@ export function CardapioFormModal({
         {days.map(({ key, label }) => {
           const day = data[key];
           const isLocked = day.isHoliday || day.isUndefined;
+          const status = getDayStatus(day);
 
           return (
             <div key={key} className={styles.dayCard}>
-              <h3 className={styles.dayTitle}>{label}</h3>
+              <div className={styles.dayHeader}>
+                <h3 className={styles.dayTitle}>{label}</h3>
+                <span
+                  className={`${styles.statusBadge} ${
+                    styles[status.className]
+                  }`}
+                >
+                  {status.label}
+                </span>
+              </div>
 
               <textarea
                 className={`${styles.textarea} ${
@@ -99,14 +172,18 @@ export function CardapioFormModal({
                 }`}
                 value={getTextareaValue(day)}
                 onChange={(e) =>
-                  onChange(key, "meals", e.target.value.split("\n"))
+                  onChange(
+                    key,
+                    "meals",
+                    e.target.value.split("\n").map((meal) => meal.trimStart()),
+                  )
                 }
                 disabled={isLocked}
                 placeholder={getTextareaPlaceholder(day)}
               />
 
-              <div className={styles.checkboxRow}>
-                <label className={styles.checkboxLabel}>
+              <div className={styles.optionRow}>
+                <label className={styles.optionPill}>
                   <input
                     type="checkbox"
                     checked={day.isUndefined}
@@ -117,7 +194,7 @@ export function CardapioFormModal({
                   <span>A definir</span>
                 </label>
 
-                <label className={styles.checkboxLabel}>
+                <label className={styles.optionPill}>
                   <input
                     type="checkbox"
                     checked={day.isHoliday}

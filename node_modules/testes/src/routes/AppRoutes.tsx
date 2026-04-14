@@ -3,6 +3,7 @@ import { Admin } from "../pages/Admin";
 import Home from "../pages/Home";
 import { Login } from "../pages/Login";
 import { CardapioPage } from "../pages/WeeklyMenu";
+import SignatureGeneratorPage from "../pages/SignatureGenerator";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 
@@ -11,6 +12,7 @@ export function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+
         <Route
           path="/login"
           element={
@@ -30,6 +32,11 @@ export function AppRoutes() {
         />
 
         <Route path="/cardapio" element={<CardapioPage />} />
+
+        <Route
+          path="/gerador-assinatura"
+          element={<SignatureGeneratorPage />}
+        />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

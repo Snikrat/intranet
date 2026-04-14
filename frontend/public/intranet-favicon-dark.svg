@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Intranet logo">
+  <defs>
+    <linearGradient id="redDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff7b80"/>
+      <stop offset="42%" stop-color="#ff2a3f"/>
+      <stop offset="100%" stop-color="#e1061c"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#ff243a" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Optical centering: group is shifted slightly upward -->
+  <g transform="translate(0,-4)" filter="url(#glow)">
+    <polyline
+      points="76,58 126,128 76,198"
+      fill="none"
+      stroke="url(#redDark)"
+      stroke-width="38"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <polyline
+      points="140,58 190,128 140,198"
+      fill="none"
+      stroke="url(#redDark)"
+      stroke-width="38"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

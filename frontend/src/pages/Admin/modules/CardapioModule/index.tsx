@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./styles.module.css";
 import { AdminLayout } from "../../components/AdminLayout";
@@ -70,6 +70,34 @@ function getDayPreviewText(day: DayMenu) {
   return day.items.trim() || "Sem itens cadastrados";
 }
 
+function getDayPreviewStatus(day: DayMenu) {
+  if (day.isHoliday) {
+    return {
+      label: "Feriado",
+      className: "previewHoliday",
+    };
+  }
+
+  if (day.isToDefine) {
+    return {
+      label: "A definir",
+      className: "previewUndefined",
+    };
+  }
+
+  if (day.items.trim()) {
+    return {
+      label: "Preenchido",
+      className: "previewFilled",
+    };
+  }
+
+  return {
+    label: "Vazio",
+    className: "previewEmpty",
+  };
+}
+
 async function getCurrentMenu(): Promise<WeeklyMenu> {
   const response = await fetch(`${API_URL}/menu/current`);
 
@@ -128,7 +156,10 @@ function convertDayToApi(day: ModalDayMenu): DayMenu {
   }
 
   return {
-    items: day.meals.join("\n").trim(),
+    items: day.meals
+      .map((meal) => meal.trim())
+      .filter(Boolean)
+      .join("\n"),
     isToDefine: false,
     isHoliday: false,
   };
@@ -183,6 +214,22 @@ export function CardapioModule() {
 
     void loadMenu();
   }, []);
+
+  const menuSummary = useMemo(() => {
+    const days = Object.values(menu.days);
+
+    const holidayCount = days.filter((day) => day.isHoliday).length;
+    const undefinedCount = days.filter((day) => day.isToDefine).length;
+    const filledCount = days.filter(
+      (day) => !day.isHoliday && !day.isToDefine && day.items.trim(),
+    ).length;
+
+    return {
+      filledCount,
+      undefinedCount,
+      holidayCount,
+    };
+  }, [menu]);
 
   function openConfirmModal(
     action: "save" | "clear",
@@ -321,18 +368,32 @@ export function CardapioModule() {
     <>
       <AdminLayout
         title="Gerenciar cardápio"
-        subtitle="Edite o cardápio da semana atual, de segunda a sexta."
+        subtitle="Atualize o cardápio semanal de segunda a sexta. Você pode preencher tudo na segunda e ajustar os dias “A definir” depois."
         buttonText="Editar cardápio"
         onNew={handleOpenModal}
       >
-        <AdminSectionCard title="Cardápio da semana atual">
+        <AdminSectionCard title="Semana atual">
           <div className={styles.weekCard}>
             <div className={styles.weekCardHeader}>
-              <div>
-                <strong className={styles.weekCardTitle}>Cardápio atual</strong>
+              <div className={styles.weekCardHeaderContent}>
                 <span className={styles.weekCardSubtitle}>
-                  Clique em “Editar cardápio” para atualizar os dias da semana
+                  Clique em “Editar cardápio” para atualizar toda a semana ou
+                  ajustar apenas os dias pendentes.
                 </span>
+
+                <div className={styles.summaryChips}>
+                  <span className={styles.summaryChip}>
+                    {menuSummary.filledCount} preenchido
+                    {menuSummary.filledCount !== 1 ? "s" : ""}
+                  </span>
+                  <span className={styles.summaryChip}>
+                    {menuSummary.undefinedCount} a definir
+                  </span>
+                  <span className={styles.summaryChip}>
+                    {menuSummary.holidayCount} feriado
+                    {menuSummary.holidayCount !== 1 ? "s" : ""}
+                  </span>
+                </div>
               </div>
 
               <StatusBadge active={menu.active} />
@@ -342,14 +403,29 @@ export function CardapioModule() {
               <p className={styles.weekPreviewText}>Carregando cardápio...</p>
             ) : (
               <div className={styles.weekPreviewGrid}>
-                {dayKeys.map((day) => (
-                  <div key={day} className={styles.weekPreviewItem}>
-                    <strong className={styles.weekPreviewDay}>{day}</strong>
-                    <p className={styles.weekPreviewText}>
-                      {getDayPreviewText(menu.days[day])}
-                    </p>
-                  </div>
-                ))}
+                {dayKeys.map((day) => {
+                  const dayData = menu.days[day];
+                  const status = getDayPreviewStatus(dayData);
+
+                  return (
+                    <div key={day} className={styles.weekPreviewItem}>
+                      <div className={styles.weekPreviewItemHeader}>
+                        <strong className={styles.weekPreviewDay}>{day}</strong>
+                        <span
+                          className={`${styles.previewBadge} ${
+                            styles[status.className]
+                          }`}
+                        >
+                          {status.label}
+                        </span>
+                      </div>
+
+                      <p className={styles.weekPreviewText}>
+                        {getDayPreviewText(dayData)}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

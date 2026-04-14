@@ -1,0 +1,156 @@
+.wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 28px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.header {
+  padding: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.description {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.content {
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+/* INPUT BASE */
+.input {
+  width: 100%;
+  height: 52px;
+  padding: 0 14px 0 40px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  outline: none;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* 🔥 HOVER */
+.input:hover {
+  border-color: #c81414;
+  background: #ffffff;
+}
+
+/* 🔥 FOCUS */
+.input:focus {
+  border-color: #c81414;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(200, 20, 20, 0.15);
+}
+
+/* 🔥 ÍCONE REAGE AO FOCUS */
+.input:focus + .icon,
+.inputWrapper:focus-within .icon {
+  color: #c81414;
+}
+
+/* 🔥 ERRO (SEM CONFLITO) */
+.error .input {
+  border-color: #dc2626;
+  background: #fff5f5;
+  box-shadow: none;
+}
+
+.error .input:hover {
+  border-color: #dc2626;
+  background: #fff5f5;
+}
+
+.errorText {
+  min-height: 18px; /* evita pulo */
+  font-size: 0.8rem;
+  color: #dc2626;
+  margin-top: 4px;
+}
+
+.selectError {
+  border-radius: 16px;
+}
+
+/* BOTÃO */
+.button {
+  margin-top: 10px;
+  height: 52px;
+  border-radius: 16px;
+  border: none;
+  background: #c81414;
+  color: white;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.button:hover {
+  background: #af1111;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(200, 20, 20, 0.2);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
