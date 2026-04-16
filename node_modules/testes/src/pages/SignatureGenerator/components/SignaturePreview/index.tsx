@@ -26,7 +26,7 @@ export function SignaturePreview({ form, signatureRef }: Props) {
       <div className={styles.header}>
         <h2 className={styles.title}>pré-visualização</h2>
         <p className={styles.description}>
-          veja como a assinatura vai ficar antes de baixar o png.
+          Veja como a assinatura vai ficar antes de baixar.
         </p>
       </div>
 
@@ -141,9 +141,6 @@ export function SignaturePreview({ form, signatureRef }: Props) {
 
           <div className={styles.infoList}>
             <p>• prefira nomes e cargos curtos para manter boa leitura</p>
-            <p>
-              • o png é prático, mas no outlook o ideal é testar o tamanho antes
-            </p>
             <p>
               • confirme se o telefone está com ddd e se o e-mail está correto
             </p>

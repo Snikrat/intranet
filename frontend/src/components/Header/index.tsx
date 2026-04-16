@@ -21,7 +21,7 @@ const menuItems: MenuItem[] = [
   { label: "início", path: "/", key: "inicio" },
   {
     label: "qualidade e risco",
-    url: "https://login.microsoftonline.com/...",
+    url: "https://pvaxlog.sharepoint.com/sites/PVAXDRIVE-FilesDrive/QUALIDADE/Forms/AllItems.aspx?id=%2Fsites%2FPVAXDRIVE%2DFilesDrive%2FQUALIDADE%2FControle%20de%20Documentos%2FPublica%C3%A7%C3%A3o%20Intranet&viewid=35166fcc%2Dff34%2D4dc0%2D8b8e%2D2a7db25af3ef",
     key: "qualidade",
   },
   { label: "brigada", path: "/brigada", key: "brigada" },
@@ -40,7 +40,6 @@ const chamadosMenu: SubMenuItem[] = [
   { label: "suporte manutenção", url: "https://helpdesk.solidezeng.com.br/" },
 ];
 
-/* 🔥 NOVO ARRAY DE UTILIDADES */
 const utilidadesMenu: SubMenuItem[] = [
   { label: "cardápio", path: "/cardapio" },
   { label: "gerador de assinatura", path: "/gerador-assinatura" },
@@ -79,6 +78,18 @@ export function Header() {
     setIsChamadosOpen(false);
   }
 
+  function isPathActive(path?: string) {
+    if (!path) return false;
+    if (path === "/") return location.pathname === "/";
+    return (
+      location.pathname === path || location.pathname.startsWith(`${path}/`)
+    );
+  }
+
+  function isSubMenuGroupActive(items: SubMenuItem[]) {
+    return items.some((item) => item.path && isPathActive(item.path));
+  }
+
   function renderMenuItem(item: MenuItem) {
     if (item.url) {
       return (
@@ -102,7 +113,7 @@ export function Header() {
           to={item.path}
           onClick={handleCloseMobileMenu}
           className={`${styles.menuLink} ${
-            location.pathname === item.path ? styles.active : ""
+            isPathActive(item.path) ? styles.active : ""
           }`}
         >
           {item.label}
@@ -134,7 +145,9 @@ export function Header() {
         <Link
           key={item.label}
           to={item.path}
-          className={styles.dropdownItem}
+          className={`${styles.dropdownItem} ${
+            isPathActive(item.path) ? styles.active : ""
+          }`}
           onClick={handleCloseMobileMenu}
         >
           {item.label}
@@ -148,7 +161,6 @@ export function Header() {
   return (
     <header className={styles.wrapper}>
       <div className={styles.container}>
-        {/* MOBILE */}
         <div className={styles.mobileTopbar}>
           <span className={styles.mobileTitle}>Intranet</span>
 
@@ -161,18 +173,15 @@ export function Header() {
           </button>
         </div>
 
-        {/* DESKTOP */}
         <div
           className={`${styles.desktopArea} ${
             isMobileMenuOpen ? styles.mobileMenuOpen : ""
           }`}
         >
           <div className={styles.navbar}>
-            {/* MENU */}
             <nav className={styles.menu}>
               {menuItems.slice(0, 2).map(renderMenuItem)}
 
-              {/* CHAMADOS */}
               <div
                 className={styles.dropdownWrapper}
                 onMouseEnter={() =>
@@ -185,7 +194,9 @@ export function Header() {
                 <button
                   type="button"
                   onClick={handleChamadosToggle}
-                  className={`${styles.menuLink} ${styles.dropdownButton}`}
+                  className={`${styles.menuLink} ${styles.dropdownButton} ${
+                    isSubMenuGroupActive(chamadosMenu) ? styles.active : ""
+                  }`}
                 >
                   abertura de chamado
                   <ChevronDown size={16} />
@@ -198,7 +209,6 @@ export function Header() {
                 )}
               </div>
 
-              {/* UTILIDADES */}
               <div
                 className={styles.dropdownWrapper}
                 onMouseEnter={() =>
@@ -211,7 +221,9 @@ export function Header() {
                 <button
                   type="button"
                   onClick={handleUtilidadesToggle}
-                  className={`${styles.menuLink} ${styles.dropdownButton}`}
+                  className={`${styles.menuLink} ${styles.dropdownButton} ${
+                    isSubMenuGroupActive(utilidadesMenu) ? styles.active : ""
+                  }`}
                 >
                   utilidades
                   <ChevronDown size={16} />
@@ -227,7 +239,6 @@ export function Header() {
               {menuItems.slice(2).map(renderMenuItem)}
             </nav>
 
-            {/* ENGRENAGEM */}
             <Link
               to={authenticated ? "/admin" : "/login"}
               className={styles.settingsButton}

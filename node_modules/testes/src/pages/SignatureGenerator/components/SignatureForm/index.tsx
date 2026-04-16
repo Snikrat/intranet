@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ImageDown, Mail, Phone, User, Briefcase } from "lucide-react";
 import { toPng } from "html-to-image";
-
 import { companies } from "../../data/companies";
 import { sanitizeFileName } from "../../utils/sanitizeFileName";
 import { maskPhone } from "../../utils/maskPhone";
