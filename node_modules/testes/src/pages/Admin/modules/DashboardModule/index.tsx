@@ -20,6 +20,10 @@ type DashboardSummary = {
     name: string;
     count: number;
   };
+  peakAccessHour: {
+    label: string;
+    count: number;
+  };
 };
 
 type Activity = {
@@ -96,6 +100,7 @@ export function DashboardModule() {
             <DashboardInsights
               mostVisitedPage={summary.mostVisitedPage}
               mostClickedSystem={summary.mostClickedSystem}
+              peakAccessHour={summary.peakAccessHour}
             />
 
             <RecentActivity

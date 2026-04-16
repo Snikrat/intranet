@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { isAuthenticated } from "../../services/auth";
-import { Settings, Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import styles from "./styles.module.css";
 
 type MenuItem = {
@@ -18,15 +18,15 @@ type SubMenuItem = {
 };
 
 const menuItems: MenuItem[] = [
-  { label: "início", path: "/", key: "inicio" },
+  { label: "Início", path: "/", key: "inicio" },
   {
-    label: "qualidade e risco",
+    label: "Qualidade e risco",
     url: "https://pvaxlog.sharepoint.com/sites/PVAXDRIVE-FilesDrive/QUALIDADE/Forms/AllItems.aspx?id=%2Fsites%2FPVAXDRIVE%2DFilesDrive%2FQUALIDADE%2FControle%20de%20Documentos%2FPublica%C3%A7%C3%A3o%20Intranet&viewid=35166fcc%2Dff34%2D4dc0%2D8b8e%2D2a7db25af3ef",
     key: "qualidade",
   },
-  { label: "brigada", path: "/brigada", key: "brigada" },
+  { label: "Brigada", path: "/brigada", key: "brigada" },
   {
-    label: "fale conosco",
+    label: "Fale conosco",
     url: "https://www.siscompliance.com.br/pvax-md-gusto/#/home",
     key: "contato",
   },
@@ -34,15 +34,15 @@ const menuItems: MenuItem[] = [
 
 const chamadosMenu: SubMenuItem[] = [
   {
-    label: "suporte tecnologia",
+    label: "Suporte tecnologia",
     url: "https://helpdesk.solutionscloud.com.br/",
   },
-  { label: "suporte manutenção", url: "https://helpdesk.solidezeng.com.br/" },
+  { label: "Suporte manutenção", url: "https://helpdesk.solidezeng.com.br/" },
 ];
 
 const utilidadesMenu: SubMenuItem[] = [
-  { label: "cardápio", path: "/cardapio" },
-  { label: "gerador de assinatura", path: "/gerador-assinatura" },
+  { label: "Cardápio", path: "/cardapio" },
+  { label: "Gerador de assinatura", path: "/gerador-assinatura" },
 ];
 
 export function Header() {
@@ -198,7 +198,7 @@ export function Header() {
                     isSubMenuGroupActive(chamadosMenu) ? styles.active : ""
                   }`}
                 >
-                  abertura de chamado
+                  Abertura de chamado
                   <ChevronDown size={16} />
                 </button>
 
@@ -225,7 +225,7 @@ export function Header() {
                     isSubMenuGroupActive(utilidadesMenu) ? styles.active : ""
                   }`}
                 >
-                  utilidades
+                  Utilidades
                   <ChevronDown size={16} />
                 </button>
 
@@ -236,17 +236,20 @@ export function Header() {
                 )}
               </div>
 
+              <Link
+                to={authenticated ? "/admin" : "/login"}
+                onClick={handleCloseMobileMenu}
+                className={`${styles.menuLink} ${
+                  isPathActive("/admin") || isPathActive("/login")
+                    ? styles.active
+                    : ""
+                }`}
+              >
+                T.I
+              </Link>
+
               {menuItems.slice(2).map(renderMenuItem)}
             </nav>
-
-            <Link
-              to={authenticated ? "/admin" : "/login"}
-              className={styles.settingsButton}
-              onClick={handleCloseMobileMenu}
-              aria-label="Acessar área administrativa"
-            >
-              <Settings size={18} />
-            </Link>
           </div>
         </div>
       </div>

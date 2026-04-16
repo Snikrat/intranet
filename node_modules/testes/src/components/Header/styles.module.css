@@ -163,37 +163,6 @@
   color: #b91c1c;
 }
 
-.settingsButton {
-  width: 32px;
-  height: 32px;
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  color: #64748b;
-  text-decoration: none;
-  border-radius: 8px;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease,
-    background 0.2s ease;
-}
-
-.settingsButton:hover {
-  color: #b91c1c;
-  background: #fff5f5;
-  transform: rotate(20deg);
-}
-
-.settingsButton:active {
-  transform: scale(0.95);
-}
-
-/* RESPONSIVO */
-
 @media (max-width: 1100px) {
   .wrapper {
     padding: 14px 6px 14px 14px;
@@ -214,11 +183,6 @@
 
   .dropdownItem {
     font-size: 0.98rem;
-  }
-
-  .settingsButton {
-    width: 30px;
-    height: 30px;
   }
 }
 
@@ -303,14 +267,7 @@
     border-radius: 8px;
     border: 1px solid #e5e7eb;
   }
-
-  .settingsButton {
-    align-self: flex-end;
-    width: 32px;
-    height: 32px;
-  }
 }
-
 @media (max-width: 480px) {
   .mobileTopbar {
     padding: 12px 14px;
@@ -327,10 +284,5 @@
 
   .dropdownItem {
     font-size: 0.92rem;
-  }
-
-  .settingsButton {
-    width: 30px;
-    height: 30px;
   }
 }

@@ -62,6 +62,42 @@ export async function getDashboardSummaryService() {
     take: 1,
   });
 
+  const pageViewsByHour = await prisma.pageView.findMany({
+    where: {
+      createdAt: {
+        gte: weekStart,
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  const accessesByHour: Record<string, number> = {};
+
+  pageViewsByHour.forEach((item) => {
+    const date = new Date(item.createdAt);
+    const hour = date.getHours().toString().padStart(2, "0");
+
+    accessesByHour[hour] = (accessesByHour[hour] || 0) + 1;
+  });
+
+  const peakEntry = Object.entries(accessesByHour).sort(
+    (a, b) => b[1] - a[1],
+  )[0];
+
+  const peakAccessHour = peakEntry
+    ? {
+        label: `${peakEntry[0]}h às ${(Number(peakEntry[0]) + 1)
+          .toString()
+          .padStart(2, "0")}h`,
+        count: peakEntry[1],
+      }
+    : {
+        label: "Sem dados nos últimos 7 dias",
+        count: 0,
+      };
+
   const mostVisitedPage = pageViews[0]
     ? {
         name: pageViews[0].page,
@@ -90,5 +126,6 @@ export async function getDashboardSummaryService() {
     accessesWeek,
     mostVisitedPage,
     mostClickedSystem,
+    peakAccessHour,
   };
 }

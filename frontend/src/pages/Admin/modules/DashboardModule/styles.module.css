@@ -6,9 +6,9 @@
 
 .dashboardGrid {
   display: grid;
-  grid-template-columns: 1fr 520px;
+  grid-template-columns: minmax(0, 1fr) 520px;
   gap: 24px;
-  align-items: stretch;
+  align-items: start;
 }
 
 @media (max-width: 1200px) {
