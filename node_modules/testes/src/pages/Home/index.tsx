@@ -6,7 +6,7 @@ import { Header } from "../../components/Header";
 import { Hero } from "./modules/Hero";
 import { PopupModal } from "../../components/PopupModal";
 import { SystemsSection } from "./modules/SystemSection";
-import { trackPageView } from "../../services/tracking";
+
 import { API_URL } from "../../config/env";
 
 type PopupDisplayType = "modal" | "floating";
@@ -32,7 +32,6 @@ type ActivePopup = {
 };
 
 function App() {
-  const hasTracked = useRef(false);
   const popupTimeoutRef = useRef<number | null>(null);
 
   const [popup, setPopup] = useState<ActivePopup | null>(null);
@@ -54,13 +53,6 @@ function App() {
 
     setShowPopup(false);
   }
-
-  useEffect(() => {
-    if (!hasTracked.current) {
-      trackPageView("home");
-      hasTracked.current = true;
-    }
-  }, []);
 
   useEffect(() => {
     const shouldLockScroll =

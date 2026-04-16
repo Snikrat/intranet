@@ -4,6 +4,7 @@ import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import { Utensils } from "lucide-react";
 import { API_URL } from "../../config/env";
+import { trackPageView } from "../../services/tracking";
 
 type DayKey = "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
 
@@ -103,6 +104,10 @@ export function CardapioPage() {
     }
 
     void loadMenu();
+  }, []);
+
+  useEffect(() => {
+    trackPageView("cardapio");
   }, []);
 
   const menuData = [

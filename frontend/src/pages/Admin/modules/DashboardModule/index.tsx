@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { SummaryCards } from "./components/SummaryCards";
 import { DashboardInsights } from "./components/DashboardInsights";
 import { RecentActivity } from "./components/RecentActivity";
-import { trackPageView } from "../../../../services/tracking";
 import { api } from "../../../../services/api";
 import styles from "./styles.module.css";
 import { AdminLayout } from "../../components/AdminLayout";
@@ -83,10 +82,6 @@ export function DashboardModule() {
 
     void loadActivities();
   }, [activitiesPage]);
-
-  useEffect(() => {
-    trackPageView("dashboard");
-  }, []);
 
   return (
     <AdminLayout title="Dashboard" subtitle="Visão geral da intranet.">

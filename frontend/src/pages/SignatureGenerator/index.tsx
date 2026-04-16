@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
+import { trackPageView } from "../../services/tracking";
 
 import styles from "./styles.module.css";
 import { SignatureHero } from "./components/SignatureHero";
@@ -25,6 +26,10 @@ function SignatureGeneratorPage() {
     email: "",
     phone: "",
   });
+
+  useEffect(() => {
+    trackPageView("signature-generator");
+  }, []);
 
   function handleChange<K extends keyof FormData>(
     field: K,
