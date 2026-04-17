@@ -73,6 +73,8 @@ export function PopupModule() {
   const [saving, setSaving] = useState(false);
 
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
   const [form, setForm] = useState<PopupFormData>(initialForm);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,6 +124,7 @@ export function PopupModule() {
         1,
         Math.ceil(normalizedData.length / ITEMS_PER_PAGE),
       );
+
       setPage((current) => Math.min(current, totalPages));
     } catch (error) {
       console.error(error);
@@ -155,25 +158,24 @@ export function PopupModule() {
     setIsModalOpen(true);
   }
 
-  function closeModal() {
-    if (saving) return;
-    setIsPreviewOpen(false);
-    setIsModalOpen(false);
+  function resetFormState() {
     setEditingId(null);
     setForm(initialForm);
+    setIsPreviewOpen(false);
+    setIsModalOpen(false);
+  }
+
+  function closeModal() {
+    if (saving) return;
+    resetFormState();
+  }
+
+  function handleClearForm() {
+    setForm(initialForm);
+    setIsPreviewOpen(false);
   }
 
   function openPreview() {
-    if (!form.title.trim()) {
-      toast.warning("Preencha pelo menos o título para visualizar a prévia");
-      return;
-    }
-
-    if (!form.message.trim()) {
-      toast.warning("Preencha o texto para visualizar a prévia");
-      return;
-    }
-
     setIsPreviewOpen(true);
   }
 
@@ -253,7 +255,7 @@ export function PopupModule() {
         closeOnlyOnButton: form.closeOnlyOnButton,
         autoCloseSeconds: form.closeOnlyOnButton ? null : autoCloseSeconds,
         displayType: form.displayType,
-        position: form.position,
+        position: form.displayType === "modal" ? "top-right" : form.position,
       };
 
       const isEditing = editingId !== null;
@@ -270,7 +272,7 @@ export function PopupModule() {
           : "Popup criado com sucesso!",
       );
 
-      closeModal();
+      resetFormState();
       await fetchPopups();
     } catch (error) {
       console.error(error);
@@ -281,17 +283,17 @@ export function PopupModule() {
   }
 
   function openDeleteConfirm(id: number) {
+    setDeletingId(id);
     setConfirmModal({
       open: true,
       action: "delete",
       title: "Excluir popup",
       message: "Deseja excluir este popup?",
     });
-
-    setEditingId(id);
   }
 
   function closeConfirmModal() {
+    setDeletingId(null);
     setConfirmModal({
       open: false,
       action: null,
@@ -301,15 +303,15 @@ export function PopupModule() {
   }
 
   async function handleDeleteConfirmed() {
-    if (editingId === null) return;
+    if (deletingId === null) return;
 
     try {
-      await api.delete(`/popups/${editingId}`);
+      await api.delete(`/popups/${deletingId}`);
 
       toast.success("Popup excluído com sucesso!");
 
-      if (isModalOpen) {
-        closeModal();
+      if (isModalOpen && editingId === deletingId) {
+        resetFormState();
       }
 
       closeConfirmModal();
@@ -436,7 +438,7 @@ export function PopupModule() {
           onDelete={
             editingId !== null ? () => openDeleteConfirm(editingId) : undefined
           }
-          onClear={() => setForm(initialForm)}
+          onClear={handleClearForm}
           onPreview={openPreview}
           onChange={handleChange}
           onDisplayTypeChange={handleDisplayTypeChange}
